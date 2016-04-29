@@ -131,12 +131,12 @@ public class ReviewFetcher {
 		        
 		       sheet.getRow(0).createCell(1).setCellValue("ReviewID");
 		        sheet.getRow(0).createCell(2).setCellValue("CustomerName");
-		        sheet.getRow(0).createCell(3).setCellValue("Comment Header");
-		        sheet.getRow(0).createCell(4).setCellValue("Rating Received");
-		        sheet.getRow(0).createCell(5).setCellValue("Maxium Rating");
-		        sheet.getRow(0).createCell(6).setCellValue("Is verified Purchase?");
-		        sheet.getRow(0).createCell(7).setCellValue("RealName");
-		        sheet.getRow(0).createCell(8).setCellValue("ReviewDate");
+		        sheet.getRow(0).createCell(3).setCellValue("Rating Received");
+		        sheet.getRow(0).createCell(4).setCellValue("Maxium Rating");
+		        sheet.getRow(0).createCell(5).setCellValue("Is verified Purchase?");
+		        sheet.getRow(0).createCell(6).setCellValue("RealName");
+		        sheet.getRow(0).createCell(7).setCellValue("ReviewDate");
+		        sheet.getRow(0).createCell(8).setCellValue("Comment Header");
 		        sheet.getRow(0).createCell(9).setCellValue("Comment");
 		    
        
@@ -145,12 +145,12 @@ public class ReviewFetcher {
 		        row.createCell(0).setCellValue(r.getItemID());
 		        row.createCell(1).setCellValue(r.getReviewID());
 		        row.createCell(2).setCellValue(r.getCustomerName());
-		        row.createCell(3).setCellValue(r.getTitle());
-		        row.createCell(4).setCellValue(r.getRating());
-		        row.createCell(5).setCellValue(r.getFullRating());
-		        row.createCell(6).setCellValue(r.isVerifiedPurchase());
-		        row.createCell(7).setCellValue(r.getRealName());
-		        row.createCell(8).setCellValue(r.getReviewDate().toString());
+		        row.createCell(3).setCellValue(r.getRating());
+		        row.createCell(4).setCellValue(r.getFullRating());
+		        row.createCell(5).setCellValue(r.isVerifiedPurchase());
+		        row.createCell(6).setCellValue(r.getRealName());
+		        row.createCell(7).setCellValue(r.getReviewDate().toString());
+		        row.createCell(8).setCellValue(r.getTitle());
 		        row.createCell(9).setCellValue(r.getContent());
 		        
 		      

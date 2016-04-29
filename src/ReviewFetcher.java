@@ -95,7 +95,7 @@ public class ReviewFetcher {
 		System.out.println(anitem.reviews.size());
 		
 	
-		
+/*		
 		for(int i = 0; i < anitem.reviews.size(); i++){
 			
 			
@@ -108,11 +108,66 @@ public class ReviewFetcher {
 		
 
 			
-		
+		*/
 		
 		//apache POI to populate arraylist to excel and out put excel file
 		
+		
+		ListIterator<Review> iteratori = anitem.reviews.listIterator();
+		
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet("new sheet");
+		
+		 int rowIndex = 1;
 
+		    while (iteratori.hasNext()) {
+
+		        Review r = iteratori.next();
+           
+           
+		        Row row = sheet.createRow(rowIndex++);
+            
+		        sheet.createRow(0).createCell(0).setCellValue("ASIN");
+		        
+		       sheet.getRow(0).createCell(1).setCellValue("ReviewID");
+		        sheet.getRow(0).createCell(2).setCellValue("CustomerName");
+		        sheet.getRow(0).createCell(3).setCellValue("Comment Header");
+		        sheet.getRow(0).createCell(4).setCellValue("Rating Received");
+		        sheet.getRow(0).createCell(5).setCellValue("Maxium Rating");
+		        sheet.getRow(0).createCell(6).setCellValue("Is verified Purchase?");
+		        sheet.getRow(0).createCell(7).setCellValue("RealName");
+		        sheet.getRow(0).createCell(8).setCellValue("ReviewDate");
+		        sheet.getRow(0).createCell(9).setCellValue("Comment");
+		    
+       
+                
+                
+		        row.createCell(0).setCellValue(r.getItemID());
+		        row.createCell(1).setCellValue(r.getReviewID());
+		        row.createCell(2).setCellValue(r.getCustomerName());
+		        row.createCell(3).setCellValue(r.getTitle());
+		        row.createCell(4).setCellValue(r.getRating());
+		        row.createCell(5).setCellValue(r.getFullRating());
+		        row.createCell(6).setCellValue(r.isVerifiedPurchase());
+		        row.createCell(7).setCellValue(r.getRealName());
+		        row.createCell(8).setCellValue(r.getReviewDate().toString());
+		        row.createCell(9).setCellValue(r.getContent());
+		        
+		      
+		        
+		    }
+		    
+	
+		  
+		    FileOutputStream fileOut = new FileOutputStream("workbook6.xls");
+	        wb.write(fileOut);
+	        fileOut.close();
+	       System.out.print("file created");
+		    
+	}
+	
+	
+	
 	
 	
 

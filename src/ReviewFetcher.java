@@ -46,22 +46,19 @@ public class ReviewFetcher {
 	Create item you are trying to search for	*/
 		
 		/*	
-		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA*/
+		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA B013ILTC3I  B013ILS39C B013IMC5OA B013IMF16O */
 			
 		
 	
 		
 		
-	/*	illegal state exception	B00PGCD8WY B013ILTC3I B013IMF16O B013RU4KN2	 */
+	/*	illegal state exception	B00PGCD8WY  B013RU4KN2	 */
 			
 		
-/*		
-		only show 1 review for B013ILS39C suppose to have 13, showing illegalstate exception*/
 
-		/*only be able to display 3 for B013IMC5OA suppose to have 5*/
 		
 /* URL http://www.amazon.com/product-reviews/B00PGCD8WY/?showViewpoints=0&sortBy=byRankDescending&pageNumber=1 is correct, but experiences javaIO or jave illegal exception 
-*/		Item anitem = new Item("B013ILTC3I  ");
+*/		Item anitem = new Item("B013RU4KN2  ");
 		
 
 		

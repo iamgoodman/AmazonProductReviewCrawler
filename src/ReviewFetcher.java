@@ -156,6 +156,9 @@ public class ReviewFetcher {
 		    
 		    
 	
+		    //only proceed with creating xls if there is no exception to be throw
+		    
+		    try{
 		  
 		    FileOutputStream fileOut = new FileOutputStream("workbook7.xls");
 		    
@@ -169,7 +172,17 @@ public class ReviewFetcher {
 	        
 	        
 	        
-	       System.out.print("file created");
+	       System.out.println("file created");
+		    }
+		    
+		    
+		   catch (Exception e){
+			   
+			   System.out.println(e);
+		   }
+		    
+		    
+		    
 		    
 	}
 	

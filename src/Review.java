@@ -72,6 +72,7 @@ public class Review {
 	}
 	
 	
+	//getter and setter methods 
 	
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);

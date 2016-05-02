@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
@@ -46,19 +47,32 @@ public class ReviewFetcher {
 	Create item you are trying to search for	*/
 		
 		/*	
-		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA B013ILTC3I  B013ILS39C B013IMC5OA B013IMF16O */
+		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA B013ILTC3I  B013ILS39C B013IMC5OA B013IMF16O B013RU4KN2	 */
 			
 		
+	ArrayList<String> a = new ArrayList<String>();
+	a.add("B00IITY6QY");
+	a.add("B013IM0EI4");
+	a.add("B013IMJJO4");
+	a.add("B013GPHZ7G");
+	a.add("B013IMMO4Q");
+	a.add("B013IM0W36");
+	
+	
+	
 	
 		
-		
-	/*	illegal state exception	B00PGCD8WY  B013RU4KN2	 */
+	/*	illegal state exception	B00PGCD8WY */
 			
 		
-
+int j=0;
 		
 /* URL http://www.amazon.com/product-reviews/B00PGCD8WY/?showViewpoints=0&sortBy=byRankDescending&pageNumber=1 is correct, but experiences javaIO or jave illegal exception 
-*/		Item anitem = new Item("B013RU4KN2  ");
+*/	for(int i = 0; i <a.size();i++)	
+	
+	
+{
+	Item anitem = new Item(a.get(i));
 		
 
 		
@@ -109,6 +123,7 @@ public class ReviewFetcher {
 		*/
 		
 		//apache POI to populate arraylist to excel and out put excel file
+	
 		
 		
 		ListIterator<Review> iteratori = anitem.reviews.listIterator();
@@ -158,9 +173,9 @@ public class ReviewFetcher {
 	
 		    //only proceed with creating xls if there is no exception to be throw
 		    
-		    try{
+		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream("workbook7.xls");
+		    FileOutputStream fileOut = new FileOutputStream("workbook"+j+".xls");
 		    
 		    
 	        
@@ -173,13 +188,12 @@ public class ReviewFetcher {
 	        
 	        
 	       System.out.println("file created");
-		    }
+	
+		    
+	         j++;
 		    
 		    
-		   catch (Exception e){
-			   
-			   System.out.println(e);
-		   }
+		    
 		    
 		    
 		    
@@ -189,7 +203,7 @@ public class ReviewFetcher {
 	
 	
 	
-	
+	}
 
 }
 

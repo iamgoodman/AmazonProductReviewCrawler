@@ -97,6 +97,8 @@ public class Item {
 				
                 reviewpage = Jsoup.connect(url).timeout(10*3000).get();
                 
+          
+                
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
 					
 					System.out.println(itemID + " " + "no reivew");
@@ -118,6 +120,7 @@ public class Item {
 
 		} catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
+		
 		}
 
 	}
@@ -191,6 +194,7 @@ public class Item {
 			totalVotes = Integer.parseInt(matcher2.group(3).replaceAll(",", ""));
 		}*/
 
+		
 		// verified purchase
 		Elements verified = reviewBlock.select("span.a-size-mini:contains(Verified Purchase)");
 		if (verified.size() > 0){

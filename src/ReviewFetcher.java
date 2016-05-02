@@ -66,8 +66,7 @@ public class ReviewFetcher {
 	
 			
 
-		
-    int j=0;
+
 		
 	for(int i = 0; i <a.size();i++)	
 	
@@ -163,7 +162,7 @@ public class ReviewFetcher {
 		    
 		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream("workbook"+j+".xls");
+		    FileOutputStream fileOut = new FileOutputStream(anitem.itemID + " " + "product review.xls");
 		    
 		    
 	        
@@ -178,7 +177,7 @@ public class ReviewFetcher {
 	       System.out.println("file created");
 	
 		    
-	         j++;
+	       
 		    
     
 		    

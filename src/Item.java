@@ -111,6 +111,7 @@ public class Item {
 	 * @throws ParseException
 	 */
 	public Review cleanReviewBlock(Element reviewBlock) throws ParseException {
+		
 		String theitemID = this.itemID;
 		String reviewID = "";
 		String customerName = "";

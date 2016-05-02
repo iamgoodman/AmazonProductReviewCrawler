@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -60,7 +61,7 @@ public class ReviewFetcher {
 		/*only be able to display 3 for B013IMC5OA suppose to have 5*/
 		
 /* URL http://www.amazon.com/product-reviews/B00PGCD8WY/?showViewpoints=0&sortBy=byRankDescending&pageNumber=1 is correct, but experiences javaIO or jave illegal exception 
-*/		Item anitem = new Item("B00IITY6QY  ");
+*/		Item anitem = new Item("B013ILTC3I  ");
 		
 
 		
@@ -128,8 +129,7 @@ public class ReviewFetcher {
 		        Row row = sheet.createRow(rowIndex++);
             
 		        sheet.createRow(0).createCell(0).setCellValue("ASIN");
-		        
-		       sheet.getRow(0).createCell(1).setCellValue("ReviewID");
+		        sheet.getRow(0).createCell(1).setCellValue("ReviewID");
 		        sheet.getRow(0).createCell(2).setCellValue("CustomerName");
 		        sheet.getRow(0).createCell(3).setCellValue("Rating Received");
 		        sheet.getRow(0).createCell(4).setCellValue("Maxium Rating");
@@ -139,8 +139,8 @@ public class ReviewFetcher {
 		        sheet.getRow(0).createCell(8).setCellValue("Comment Header");
 		        sheet.getRow(0).createCell(9).setCellValue("Comment");
 		    
-       
-                
+
+  
                 
 		        row.createCell(0).setCellValue(r.getItemID());
 		        row.createCell(1).setCellValue(r.getReviewID());
@@ -157,11 +157,21 @@ public class ReviewFetcher {
 		        
 		    }
 		    
+		    
 	
 		  
-		    FileOutputStream fileOut = new FileOutputStream("workbook6.xls");
-	        wb.write(fileOut);
+		    FileOutputStream fileOut = new FileOutputStream("workbook7.xls");
+		    
+		    
+	        
+		    wb.write(fileOut);
+	        
+		    
+		    
 	        fileOut.close();
+	        
+	        
+	        
 	       System.out.print("file created");
 		    
 	}

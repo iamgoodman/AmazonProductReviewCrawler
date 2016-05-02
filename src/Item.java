@@ -154,10 +154,16 @@ public class Item {
 				"href", "/gp/pdp/profile/");
 		if (customerIDs.size() > 0) {
 			Element customer = customerIDs.first();
+			
+			
 			String customerhref = customer.attr("href");
+			
 			String patternString = "(/gp/pdp/profile/)(.+)";
+			
 			Pattern pattern = Pattern.compile(patternString);
+			
 			Matcher matcher = pattern.matcher(customerhref);
+			
 			matcher.find();
 			// cutomer id;
 			customerID = matcher.group(2);
@@ -173,7 +179,7 @@ public class Item {
 		String starinfo = star.text();
 		rating = Integer.parseInt(starinfo.substring(0, 1));
 
-		// usefulness voting
+		/*// usefulness voting
 		Elements votes = reviewBlock.select("span.review-votes");
 		if (votes.size() > 0) {
 			String votingtext = votes.first().text();
@@ -183,7 +189,7 @@ public class Item {
 			// customer id;
 			helpfulVotes = Integer.parseInt(matcher2.group(1).replaceAll(",", ""));
 			totalVotes = Integer.parseInt(matcher2.group(3).replaceAll(",", ""));
-		}
+		}*/
 
 		// verified purchase
 		Elements verified = reviewBlock.select("span.a-size-mini:contains(Verified Purchase)");

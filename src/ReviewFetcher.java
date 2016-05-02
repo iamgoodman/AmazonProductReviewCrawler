@@ -1,4 +1,5 @@
 import java.awt.List;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -43,8 +44,7 @@ public class ReviewFetcher {
 	public static void main(String[] args) throws IOException, ParseException,
 			ClassNotFoundException, SQLException, InvalidKeyException,
 			NoSuchAlgorithmException, InterruptedException {
-		
-		List list1 = new List();
+	
 
 /*
 	Create item you are trying to search for	*/
@@ -64,14 +64,12 @@ public class ReviewFetcher {
 	
 	
 	
-		
-	/*	illegal state exception	B00PGCD8WY */
 			
+
 		
-int j=0;
+    int j=0;
 		
-/* URL http://www.amazon.com/product-reviews/B00PGCD8WY/?showViewpoints=0&sortBy=byRankDescending&pageNumber=1 is correct, but experiences javaIO or jave illegal exception 
-*/	for(int i = 0; i <a.size();i++)	
+	for(int i = 0; i <a.size();i++)	
 	
 	
 {
@@ -110,20 +108,7 @@ int j=0;
 		System.out.println(anitem.reviews.size());
 		
 	
-/*		
-		for(int i = 0; i < anitem.reviews.size(); i++){
-			
-			
-			
-			
-			System.out.println(anitem.reviews.get(i).getReviewDate());
-			
-			
-		}
-		
 
-			
-		*/
 		
 		//apache POI to populate arraylist to excel and out put excel file
 	
@@ -188,8 +173,7 @@ int j=0;
 		    
 	        fileOut.close();
 	        
-	  
-	     
+
 	     
 	       System.out.println("file created");
 	
@@ -201,11 +185,11 @@ int j=0;
 	}
 	
 
+
 	
 	}
 	
-	
-	
+
 	
 
 }

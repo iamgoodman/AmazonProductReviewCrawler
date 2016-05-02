@@ -31,56 +31,44 @@ import org.w3c.dom.NodeList;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/**
+ * A product and all of its reviews
+ * @author Feng Mai
+ * 
+ */
+
 
 public class Item {
 	
 	public String itemID;
-	
-	
 	public ArrayList<Review> reviews;
-	
 	
 	
 	public Item(String theitemid) {
 		itemID = theitemid;
 		reviews = new ArrayList<Review>();
 	}
-	
 
 	public void addReview(Review thereview) {
 		reviews.add(thereview);
 	}
 
-
-	
+	/**
+	 * Fetch all reviews for the item from Amazon.com
+	 */
 	public void fetchReview() {
 		String url = "http://www.amazon.com/product-reviews/" + itemID
 				+ "/?showViewpoints=0&sortBy=byRankDescending&pageNumber=" + 1;
 		try {
 			// Get the max number of review pages;
-			
-			
 			org.jsoup.nodes.Document reviewpage1 = null;
-			
 			reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
-			
-			
 			int maxpage = 1;
-			
-			
-			// get correct number of pages under review
-			
 			Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
-			
-			
 			if (pagelinks.size() != 0) {
-				
 				ArrayList<Integer> pagenum = new ArrayList<Integer>();
-				
 				for (Element link : pagelinks) {
-					
 					try {
-						
 						pagenum.add(Integer.parseInt(link.text()));
 					} catch (NumberFormatException nfe) {
 					}
@@ -94,23 +82,13 @@ public class Item {
 						+ "/?sortBy=helpful&pageNumber="
 						+ p;
 				org.jsoup.nodes.Document reviewpage = null;
-				
-                reviewpage = Jsoup.connect(url).timeout(10*3000).get();
-                
-          
-                
+                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
-					
 					System.out.println(itemID + " " + "no reivew");
-					
 				} else {
-					
 					Elements reviewsHTMLs = reviewpage.select(
-							
 							"div.a-section.review");
-					
 					for (Element reviewBlock : reviewsHTMLs) {
-						
                         Review theReview = cleanReviewBlock(reviewBlock);
 						this.addReview(theReview);
 					}
@@ -120,12 +98,10 @@ public class Item {
 
 		} catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
-		
 		}
 
 	}
-	
-	
+
 	/**
 	 * cleans the html block that contains a review
 	 * 
@@ -157,16 +133,10 @@ public class Item {
 				"href", "/gp/pdp/profile/");
 		if (customerIDs.size() > 0) {
 			Element customer = customerIDs.first();
-			
-			
 			String customerhref = customer.attr("href");
-			
 			String patternString = "(/gp/pdp/profile/)(.+)";
-			
 			Pattern pattern = Pattern.compile(patternString);
-			
 			Matcher matcher = pattern.matcher(customerhref);
-			
 			matcher.find();
 			// cutomer id;
 			customerID = matcher.group(2);
@@ -182,7 +152,7 @@ public class Item {
 		String starinfo = star.text();
 		rating = Integer.parseInt(starinfo.substring(0, 1));
 
-		/*// usefulness voting
+	/*	// usefulness voting
 		Elements votes = reviewBlock.select("span.review-votes");
 		if (votes.size() > 0) {
 			String votingtext = votes.first().text();
@@ -194,7 +164,6 @@ public class Item {
 			totalVotes = Integer.parseInt(matcher2.group(3).replaceAll(",", ""));
 		}*/
 
-		
 		// verified purchase
 		Elements verified = reviewBlock.select("span.a-size-mini:contains(Verified Purchase)");
 		if (verified.size() > 0){
@@ -215,13 +184,9 @@ public class Item {
 		Review thereview = new Review(theitemID, reviewID, customerName,
 				customerID, title, rating, fullRating, helpfulVotes,
 				totalVotes, verifiedPurchase, realName, reviewDate, content);
-		
         return thereview;
 	}
-	
-	
-	
-	
-	
+
+
 
 }

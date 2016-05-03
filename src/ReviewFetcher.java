@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -52,6 +53,7 @@ public class ReviewFetcher {
 		/*	
 		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA B013ILTC3I  B013ILS39C B013IMC5OA B013IMF16O B013RU4KN2	 */
 			
+		//testing the fetcher by implment Asins into an arraylist
 		
 	ArrayList<String> a = new ArrayList<String>();
 	a.add("B00IITY6QY");
@@ -60,18 +62,27 @@ public class ReviewFetcher {
 	a.add("B013GPHZ7G");
 	a.add("B013IMMO4Q");
 	a.add("B013IM0W36");
-	
+	a.add("B013ILWMLW");
+	a.add("B013ILS8DS");
+	a.add("B013IM0BUA");
+	a.add("B013ILTC3I");
+	a.add("B013ILS39C");
 	
 	
 	
 			
-
+//add sleep method to pause the this program to prevent httpexception 503
+	
+	
 
 		
 	for(int i = 0; i <a.size();i++)	
 	
 	
 {
+		
+	
+		
 	Item anitem = new Item(a.get(i));
 		
 
@@ -184,14 +195,14 @@ public class ReviewFetcher {
 	}
 	
 
-
+	}
 	
 	}
 	
 
 	
 
-}
+
 
 
 	

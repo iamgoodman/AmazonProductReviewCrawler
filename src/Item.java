@@ -55,8 +55,12 @@ public class Item {
 
 	/**
 	 * Fetch all reviews for the item from Amazon.com
+	 * @throws IOException 
+	 * @throws ParseException 
+	 * @throws NoSuchAlgorithmException 
+	 * @throws InvalidKeyException 
 	 */
-	public void fetchReview() {
+	public void fetchReview() throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException {
 		String url = "http://www.amazon.com/product-reviews/" + itemID
 				+ "/?showViewpoints=0&sortBy=byRankDescending&pageNumber=" + 1;
 		try {
@@ -98,6 +102,66 @@ public class Item {
 
 		} catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
+			
+			
+			// Input to Sign;
+			SignedRequestsHelper helper = new SignedRequestsHelper();
+			
+			Map<String, String> variablemap = new HashMap<String, String>();
+			//*****ADD YOUR AssociateTag HERE*****
+			variablemap.put("AssociateTag", "");
+			variablemap.put("Operation", "ItemLookup");
+			variablemap.put("Service", "AWSECommerceService");
+			variablemap.put("ItemId",itemID);
+			variablemap.put("ResponseGroup", "Large");
+
+			// Sign and get the REST url;
+		
+			helper.sign(variablemap);
+			
+			
+			
+			// Get the max number of review pages;
+						org.jsoup.nodes.Document reviewpage1 = null;
+						reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
+						int maxpage = 1;
+						Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
+						if (pagelinks.size() != 0) {
+							ArrayList<Integer> pagenum = new ArrayList<Integer>();
+							for (Element link : pagelinks) {
+								try {
+									pagenum.add(Integer.parseInt(link.text()));
+								} catch (NumberFormatException nfe) {
+								}
+							}
+							maxpage = Collections.max(pagenum);
+						}
+						// collect review from each of the review pages;
+						for (int p = 1; p <= maxpage; p = p + 1) {
+							url = "http://www.amazon.com/product-reviews/"
+									+ itemID
+									+ "/?sortBy=helpful&pageNumber="
+									+ p;
+							org.jsoup.nodes.Document reviewpage = null;
+			                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
+							if (reviewpage.select("div.a-section.review").isEmpty()) {
+								System.out.println(itemID + " " + "no reivew");
+							} else {
+								Elements reviewsHTMLs = reviewpage.select(
+										"div.a-section.review");
+								for (Element reviewBlock : reviewsHTMLs) {
+			                        Review theReview = cleanReviewBlock(reviewBlock);
+									this.addReview(theReview);
+								}
+							}
+
+			
+			
+						
+			
+			
+			
+		}
 		}
 
 	}

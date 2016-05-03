@@ -56,16 +56,31 @@ public class ReviewFetcher {
 		//testing the fetcher by implment Asins into an arraylist
 		
 	ArrayList<String> a = new ArrayList<String>();
+	
+	
+	
+	
+	
 	a.add("B00IITY6QY");
+	
 	a.add("B013IM0EI4");
+	
 	a.add("B013IMJJO4");
+	
 	a.add("B013GPHZ7G");
+	
 	a.add("B013IMMO4Q");
+	
 	a.add("B013IM0W36");
+	
 	a.add("B013ILWMLW");
+	
 	a.add("B013ILS8DS");
+	
 	a.add("B013IM0BUA");
+
 	a.add("B013ILTC3I");
+	
 	a.add("B013ILS39C");
 	
 	
@@ -117,7 +132,11 @@ public class ReviewFetcher {
 		
 		System.out.println(anitem.reviews.size());
 		
-	
+	if(anitem.reviews.size()==0){
+		
+		anitem.fetchReview();
+		
+	}
 
 		
 		//apache POI to populate arraylist to excel and out put excel file

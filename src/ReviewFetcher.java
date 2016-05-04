@@ -1,5 +1,6 @@
 import java.awt.List;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -30,6 +31,9 @@ import org.apache.poi.ss.usermodel.RichTextString;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class ReviewFetcher {
@@ -57,6 +61,9 @@ public class ReviewFetcher {
 			
 		//testing the fetcher by implment Asins into an arraylist
 		
+		
+		
+/*		
 	ArrayList<String> a = new ArrayList<String>();
 	
 	
@@ -84,23 +91,77 @@ public class ReviewFetcher {
 	a.add("B013ILTC3I");
 	
 	a.add("B013ILS39C");
+	*/
 	
-	
-	
+		 // Location of the source file
+        String sourceFilePath = "c:\\i.xls";
+          
+        FileInputStream fileInputStream = null;
+          
+        // Array List to store the excel sheet data
+        ArrayList excelData = new ArrayList();
+          
+        try {
+              
+            // FileInputStream to read the excel file
+            fileInputStream = new FileInputStream(sourceFilePath);
+   
+            // Create an excel workbook
+            HSSFWorkbook excelWorkBook = new HSSFWorkbook(fileInputStream);
+              
+            // Retrieve the first sheet of the workbook.
+            HSSFSheet excelSheet = excelWorkBook.getSheetAt(0);
+   
+            // Iterate through the sheet rows and cells. 
+            // Store the retrieved data in an arrayList
+            java.util.Iterator<Row> rows = excelSheet.rowIterator();
+            while (rows.hasNext()) {
+                HSSFRow row = (HSSFRow) rows.next();
+                java.util.Iterator<Cell> cells = row.cellIterator();
+   
+                ArrayList cellData = new ArrayList();
+                while (cells.hasNext()) {
+                    HSSFCell cell = (HSSFCell) cells.next();
+                    cellData.add(cell);
+                }
+   
+                excelData .add(cellData);
+            }
+              
+            // Print retrieved data to the console
+            for (int rowNum = 0; rowNum < excelData.size(); rowNum++) {
+                  
+                ArrayList list = (ArrayList) excelData.get(rowNum);
+                  
+                for (int cellNum = 0; cellNum < list.size(); cellNum++) {
+                      
+                    HSSFCell cell = (HSSFCell) list.get(cellNum);
+                      
+                  
+                }
+                System.out.println("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (fileInputStream != null) {
+                fileInputStream.close();
+            }
+        }
 			
 
 	
 	
 
 		
-	for(int i = 0; i <a.size();i++)	
+	for(int i = 0; i <excelData.size();i++)	
 	
 	
 {
 		
 	
 		
-	Item anitem = new Item(a.get(i));
+	Item anitem = new Item(excelData.get(i).toString().substring(1, excelData.get(i).toString().length()-1));
 		
 
 		

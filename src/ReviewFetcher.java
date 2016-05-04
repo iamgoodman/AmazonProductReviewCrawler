@@ -140,7 +140,7 @@ public class ReviewFetcher {
                       
                   
                 }
-                System.out.println("");
+                
             }
         } catch (IOException e) {
             e.printStackTrace();

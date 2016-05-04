@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -160,6 +161,7 @@ public class ReviewFetcher {
 {
 		
 	
+		//get rid of the curly brackets appeared in the list
 		
 	Item anitem = new Item(excelData.get(i).toString().substring(1, excelData.get(i).toString().length()-1));
 		
@@ -201,8 +203,16 @@ public class ReviewFetcher {
 		anitem.fetchReview();
 		
 	}
-
+    
+	
 		
+		if(anitem.reviews.isEmpty())
+		{
+		
+			continue;
+			
+		}
+
 		//sort by date
 		
 		Collections.sort(anitem.reviews);

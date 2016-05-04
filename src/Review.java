@@ -237,7 +237,7 @@ public class Review implements Comparable<Review> {
 //add comparator to sort date
 	@Override
 	public int compareTo(Review r) {
-		return getReviewDate().compareTo(r.getReviewDate());
+		return r.getReviewDate().compareTo(getReviewDate());
 	}
 	
 	

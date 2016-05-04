@@ -88,7 +88,7 @@ public class ReviewFetcher {
 	
 	
 			
-//add sleep method to pause the this program to prevent httpexception 503
+
 	
 	
 
@@ -161,8 +161,7 @@ public class ReviewFetcher {
 
 		        Review r = iteratori.next();
   
-		     
-		        /*
+		        		        /*
 		        r.getReviewDate().after(date);*/
           
 		        Row row = sheet.createRow(rowIndex++);
@@ -188,7 +187,7 @@ public class ReviewFetcher {
 		        row.createCell(4).setCellValue(r.getFullRating());
 		        row.createCell(5).setCellValue(r.isVerifiedPurchase());
 		        row.createCell(6).setCellValue(r.getRealName());
-		        row.createCell(7).setCellValue(r.getReviewDate().toString());
+		        row.createCell(7).setCellValue(r.getReviewDate().toString().substring(3, r.getReviewDate().toString().length()));
 		        row.createCell(8).setCellValue(r.getTitle());
 		        row.createCell(9).setCellValue(r.getContent());
 		        

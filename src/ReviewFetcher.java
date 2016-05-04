@@ -8,7 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.ListIterator;
 import java.util.Map;
@@ -59,7 +61,7 @@ public class ReviewFetcher {
 	
 	
 	
-	
+
 	
 	a.add("B00IITY6QY");
 	
@@ -132,12 +134,17 @@ public class ReviewFetcher {
 		
 		System.out.println(anitem.reviews.size());
 		
-	if(anitem.reviews.size()==0){
+//if server denied the reqeust, fetch again
+		if(anitem.reviews.size()==0){
 		
 		anitem.fetchReview();
 		
 	}
 
+		
+		//sort by date
+		
+		Collections.sort(anitem.reviews);
 		
 		//apache POI to populate arraylist to excel and out put excel file
 	
@@ -153,8 +160,11 @@ public class ReviewFetcher {
 		    while (iteratori.hasNext()) {
 
 		        Review r = iteratori.next();
-           
-           
+  
+		     
+		        /*
+		        r.getReviewDate().after(date);*/
+          
 		        Row row = sheet.createRow(rowIndex++);
             
 		        sheet.createRow(0).createCell(0).setCellValue("ASIN");

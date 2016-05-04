@@ -4,7 +4,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 
-public class Review {
+public class Review implements Comparable<Review> {
 	/**
 	 * All the pieces in a review on Amazon.com
 	 * 
@@ -232,6 +232,12 @@ public class Review {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+//add comparator to sort date
+	@Override
+	public int compareTo(Review r) {
+		return getReviewDate().compareTo(r.getReviewDate());
 	}
 	
 	

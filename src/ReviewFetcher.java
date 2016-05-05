@@ -1,4 +1,4 @@
-import java.awt.List;
+import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,50 +49,19 @@ public class ReviewFetcher {
 	 * @throws InvalidKeyException
 	 * @throws InterruptedException
 	 */
+	
 	public static void main(String[] args) throws IOException, ParseException,
 			ClassNotFoundException, SQLException, InvalidKeyException,
 			NoSuchAlgorithmException, InterruptedException {
 	
 
-/*
-	Create item you are trying to search for	*/
-		
-		/*	
-		work most of time, but some times has  httpexception	B00IITY6QY B013IM0EI4 B013IMJJO4 B013GPHZ7G	B013IMMO4Q B013IM0W36 B013ILWMLW B013ILS8DS B013IM0BUA B013ILTC3I  B013ILS39C B013IMC5OA B013IMF16O B013RU4KN2	 */
-			
-		//testing the fetcher by implment Asins into an arraylist
+	
 		
 		
 		
-/*		
-	ArrayList<String> a = new ArrayList<String>();
-	
-	
-	
-
-	
-	a.add("B00IITY6QY");
-	
-	a.add("B013IM0EI4");
-	
-	a.add("B013IMJJO4");
-	
-	a.add("B013GPHZ7G");
-	
-	a.add("B013IMMO4Q");
-	
-	a.add("B013IM0W36");
-	
-	a.add("B013ILWMLW");
-	
-	a.add("B013ILS8DS");
-	
-	a.add("B013IM0BUA");
-
-	a.add("B013ILTC3I");
-	
-	a.add("B013ILS39C");
-	*/
+		
+	          
+//To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
         String sourceFilePath = "c:\\i.xls";
@@ -153,7 +122,7 @@ public class ReviewFetcher {
 
 	
 	
-
+//Get rid of curly brackets in data of the formatted arraylist and input into data item to begin fetching product review
 		
 	for(int i = 0; i <excelData.size();i++)	
 	
@@ -167,8 +136,8 @@ public class ReviewFetcher {
 		
 
 		
-		/*
-	Standard Amazon Sign in  API*/
+		
+	//Use Standard Amazon API to sign in Amazon to begin fetching
 
 // Input to Sign;
 		SignedRequestsHelper helper = new SignedRequestsHelper();
@@ -186,8 +155,8 @@ public class ReviewFetcher {
 		helper.sign(variablemap);
 		
 		
-/*		testing on most popular item
-		*/
+	
+		
 		
 		
 		
@@ -197,7 +166,8 @@ public class ReviewFetcher {
 		
 		System.out.println(anitem.reviews.size());
 		
-//if server denied the reqeust, fetch again
+//if server denied the reqeust, fetch again, or in case of empty string
+		
 		if(anitem.reviews.size()==0){
 		
 		anitem.fetchReview();
@@ -213,11 +183,13 @@ public class ReviewFetcher {
 			
 		}
 
-		//sort by date
+		//sort review by date as requested, implemented comparable in itmes, sort in descending order
 		
 		Collections.sort(anitem.reviews);
 		
-		//apache POI to populate arraylist to excel and out put excel file
+		
+		
+		//apache POI to populate arraylist to excel and out put excel files of product reviews of each ASIn
 	
 		
 		
@@ -232,8 +204,8 @@ public class ReviewFetcher {
 
 		        Review r = iteratori.next();
   
-		        		        /*
-		        r.getReviewDate().after(date);*/
+		        		        
+		  
           
 		        Row row = sheet.createRow(rowIndex++);
             
@@ -272,7 +244,7 @@ public class ReviewFetcher {
 		    
 		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream(anitem.itemID + " " + "product review.xls");
+		    FileOutputStream fileOut = new FileOutputStream(anitem.itemID + ".xls");
 		    
 		    
 	        
@@ -294,6 +266,46 @@ public class ReviewFetcher {
 	}
 	
 
+	//merge list of genereated prodcut review into a signle file
+	
+	//location of list of excel files of product reviews
+	 File file = new File("\\Excel");
+	 
+	 FileInputStream fis = null;
+	 //make it as a list
+	  File[] listOfFiles = file.listFiles();
+	  //make it into List<fileinput stream> formatt
+	  List<FileInputStream> l =  new ArrayList<FileInputStream>();
+	  
+	  for (int i = 0; i < listOfFiles.length; i++) {
+		  
+		  l.add(fis = new FileInputStream(listOfFiles[i]));
+		  
+		  
+	  }
+	 
+        //checking for sucess
+	  
+	  for(FileInputStream l1 : l)
+		  
+	  {
+		  
+		  System.out.println(l1);
+	  }
+      
+	  //out put location of the combined excels of product reviews
+        File f = new File("c:\\new\\result.xls"); 
+
+      //merge
+        Mergexls.mergeExcelFiles(f, l);
+	
+	
+
+	
+	
+	
+	
+	
 	}
 	
 	}

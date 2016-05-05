@@ -266,7 +266,7 @@ public class ReviewFetcher {
 	}
 	
 
-	//merge list of genereated prodcut review into a signle file
+	/*//merge list of genereated prodcut review into a signle file
 	
 	//location of list of excel files of product reviews
 	 File file = new File("\\Excel");
@@ -298,7 +298,7 @@ public class ReviewFetcher {
 
       //merge
         Mergexls.mergeExcelFiles(f, l);
-	
+	*/
 	
 
 	

@@ -1,3 +1,5 @@
+
+
 import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,6 +57,8 @@ public class ReviewFetcher {
 	 * @throws InterruptedException
 	 */
 	
+	
+	
 	public static void main(String[] args) throws IOException, ParseException,
 			ClassNotFoundException, SQLException, InvalidKeyException,
 			NoSuchAlgorithmException, InterruptedException {
@@ -68,7 +73,7 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
-        String sourceFilePath = "c:\\bgc.xls";
+        String sourceFilePath = "c:\\iboardtest.xls";
           
         FileInputStream fileInputStream = null;
           

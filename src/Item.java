@@ -32,11 +32,7 @@ import org.w3c.dom.NodeList;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/**
- * A product and all of its reviews
- * @author Feng Mai
- * 
- */
+
 
 
 public class Item {
@@ -63,10 +59,22 @@ public class Item {
 	 */
 	public void fetchReview() throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException {
 		
+		
+		//this is intended for all pages
+	/*	String url = "http://www.amazon.com/product-reviews/" + itemID
+				+ "/?showViewpoints=0&sortBy=byRankDescending&pageNumber=" + 1;*/
+		
+		//this is inteded for just the latest reviews.
+		
 		String url = "http://www.amazon.com/product-reviews/" + itemID
-				+ "/?showViewpoints=0&sortBy=byRankDescending&pageNumber=" + 1;
+				+ "/ref=cm_cr_arp_d_viewopt_srt?showViewpoints=0&sortBy=recent&pageNumber" + 1;
+		
+		
+		
+		
+		
 		try {
-			// Get the max number of review pages;
+			/*// Get the max number of review pages;
 			org.jsoup.nodes.Document reviewpage1 = null;
 			reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
 			int maxpage = 1;
@@ -86,7 +94,7 @@ public class Item {
 				url = "http://www.amazon.com/product-reviews/"
 						+ itemID
 						+ "/?sortBy=helpful&pageNumber="
-						+ p;
+						+ p;*/
 				org.jsoup.nodes.Document reviewpage = null;
                 reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
@@ -102,7 +110,7 @@ public class Item {
 
 			}
 
-		} catch (Exception e) {
+		/*}*/ catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
 			
 			
@@ -129,7 +137,7 @@ public class Item {
 			
 			
 			// Get the max number of review pages;
-						org.jsoup.nodes.Document reviewpage1 = null;
+						/*org.jsoup.nodes.Document reviewpage1 = null;
 						reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
 						int maxpage = 1;
 						Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
@@ -148,7 +156,7 @@ public class Item {
 							url = "http://www.amazon.com/product-reviews/"
 									+ itemID
 									+ "/?sortBy=helpful&pageNumber="
-									+ p;
+									+ p;*/
 							org.jsoup.nodes.Document reviewpage = null;
 			                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 							if (reviewpage.select("div.a-section.review").isEmpty()) {
@@ -168,7 +176,7 @@ public class Item {
 			
 			
 			
-		}
+		/*}*/
 		}catch(Exception ex) {
 			
 			//handle exception 
@@ -196,7 +204,7 @@ public class Item {
 				
 				
 				// Get the max number of review pages;
-							org.jsoup.nodes.Document reviewpage1 = null;
+						/*	org.jsoup.nodes.Document reviewpage1 = null;
 							reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
 							int maxpage = 1;
 							Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
@@ -215,7 +223,7 @@ public class Item {
 								url = "http://www.amazon.com/product-reviews/"
 										+ itemID
 										+ "/?sortBy=helpful&pageNumber="
-										+ p;
+										+ p;*/
 								org.jsoup.nodes.Document reviewpage = null;
 				                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 								if (reviewpage.select("div.a-section.review").isEmpty()) {
@@ -232,7 +240,7 @@ public class Item {
 				
 				
 							
-							}
+						/*	}*/
 			
 			
 			

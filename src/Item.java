@@ -95,22 +95,60 @@ public class Item {
 						+ itemID
 						+ "/?sortBy=helpful&pageNumber="
 						+ p;*/
+			
+			
+			
 				org.jsoup.nodes.Document reviewpage = null;
+				
                 reviewpage = Jsoup.connect(url).timeout(10*1000).get();
+                
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
+					
 					System.out.println(itemID + " " + "no reivew");
+					
 				} else {
 					Elements reviewsHTMLs = reviewpage.select(
 							"div.a-section.review");
+					
+					
 					for (Element reviewBlock : reviewsHTMLs) {
+						
+						
+						  Elements date = reviewBlock.select("span.review-date");
+						  
+					        String datetext = date.first().text();
+					        
+					        datetext= datetext.substring(3);
+					        		
+					        		
+					        System.out.println(datetext);
+					        
+					   
+					    	
+						
+						if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
+								datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016")){
+							
+							System.out.println("inside");
+							
+							
                         Review theReview = cleanReviewBlock(reviewBlock);
+                        
+                        
 						this.addReview(theReview);
+						
+						
+						}
+					
+						
 					}
 				}
 
 			}
 
-		/*}*/ catch (Exception e) {
+		/*}*/ 
+		
+		catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
 			
 			
@@ -164,9 +202,45 @@ public class Item {
 							} else {
 								Elements reviewsHTMLs = reviewpage.select(
 										"div.a-section.review");
+								
 								for (Element reviewBlock : reviewsHTMLs) {
+									
+									
+									 Elements date = reviewBlock.select("span.review-date");
+								        String datetext = date.first().text();
+								        
+								        
+								        
+								        datetext= datetext.substring(3);
+								        		
+								        		
+								        System.out.println(datetext);
+								        
+								    
+								        
+								        
+									
+									if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
+											datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016") ){
+									
+										System.out.println("inside");
+										
 			                        Review theReview = cleanReviewBlock(reviewBlock);
+			                        
 									this.addReview(theReview);
+									
+									}
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
+									
 								}
 							}
 
@@ -226,14 +300,42 @@ public class Item {
 										+ p;*/
 								org.jsoup.nodes.Document reviewpage = null;
 				                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
+				                
 								if (reviewpage.select("div.a-section.review").isEmpty()) {
 									System.out.println(itemID + " " + "no reivew");
-								} else {
+								} 
+								
+								else {
 									Elements reviewsHTMLs = reviewpage.select(
 											"div.a-section.review");
 									for (Element reviewBlock : reviewsHTMLs) {
+										
+										
+										
+										
+										
+										 Elements date = reviewBlock.select("span.review-date");
+									        String datetext = date.first().text();
+									        
+									        
+									        datetext= datetext.substring(3);
+									        
+									        
+									        System.out.println(datetext);
+										
+										if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
+												datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016") ){
+											
+											
+											System.out.println("inside");
+										
 				                        Review theReview = cleanReviewBlock(reviewBlock);
+				                        
 										this.addReview(theReview);
+										
+										}
+										
+			
 									}
 								}
 
@@ -274,7 +376,7 @@ public class Item {
 		int helpfulVotes = 0;
 		int totalVotes = 0;
 		boolean verifiedPurchase = false;
-		String realName = "N/A"; //Note 2015-11-14 : Amazon seems to got rid of the real name badge
+		String realName = "N/A"; 
 
 		String content = "";
 
@@ -296,9 +398,9 @@ public class Item {
 			// customer name;
 			customerName = customer.text();
         }
-		// title
-		Element reviewTitle = reviewBlock.select("a.review-title").first();
-		title = reviewTitle.text();
+		
+        	
+     
 
 		// rating
 		Element star = reviewBlock.select("i.a-icon-star").first();
@@ -319,6 +421,7 @@ public class Item {
 
 		// verified purchase
 		Elements verified = reviewBlock.select("span.a-size-mini:contains(Verified Purchase)");
+		
 		if (verified.size() > 0){
             verifiedPurchase = true;
         }
@@ -339,7 +442,11 @@ public class Item {
 				totalVotes, verifiedPurchase, realName, reviewDate, content);
         return thereview;
 	}
+        
+     
 
-
+	
+	
+	
 
 }

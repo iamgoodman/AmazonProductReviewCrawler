@@ -73,7 +73,7 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
-        String sourceFilePath = "c:\\iboardtest.xls";
+        String sourceFilePath = "c:\\test1.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -276,6 +276,9 @@ public class ReviewFetcher {
 		    
 	}
 	
+		
+		
+		
 
 /*	//merge list of genereated prodcut review into a signle file
 	
@@ -305,88 +308,12 @@ public class ReviewFetcher {
 	  }
       
 	  //out put location of the combined excels of product reviews
-        File f = new File("c:\\new\\resultforBGC.xls"); 
+        File f = new File("c:\\new\\resultforBGC-5-13-16.xls"); 
 
       //merge
         Mergexls.mergeExcelFiles(f, l);
-	*/
 	
 
-	
-/*	//attempting to remove duplicate rows of geneated excel. Bugged
-	
-	File file2 = new File("\\row\\resultforBGC.xls");
-	
-	  HSSFWorkbook workBook = null;  
-	  POIFSFileSystem fs = null;  
-	  HSSFSheet sheet = null;  
-	  try {  
-	   fs = new POIFSFileSystem(new FileInputStream(file2));  
-	   workBook = new HSSFWorkbook(fs);  
-	   sheet = workBook.getSheetAt(0);  
-	   int rows = sheet.getPhysicalNumberOfRows();  
-	   System.out.println(rows);  
-	   Set s=new HashSet();  
-	   String str="";  
-	   for (int i = 1; i < rows; i++) {  
-	    str="";  
-	    HSSFRow row = sheet.getRow((short) i);
-	    System.out.println(row);
-	    int columns = row.getPhysicalNumberOfCells();  
-	    for (int j = 0; j < columns; ++j) {  
-	     HSSFCell cell0 = row.getCell((short) j);  
-	     int type=cell0.getCellType();  
-	     if(type==0){  
-	      double intValue= cell0.getNumericCellValue();  
-	      str=str+String.valueOf(intValue)+",";  
-	      }else if(type==1){  
-	      String stringValue=cell0.getStringCellValue();  
-	      str=str+stringValue+",";  
-	     }  
-	       
-	    }  
-	    str=str  
-	    .replace(str.charAt(str  
-	      .lastIndexOf(",")), ' ');  
-	    s.add(str.trim());  
-	   }  
-	   StringTokenizer st=null;  
-	   String result="";  
-	   Iterator iter=s.iterator();  
-	     
-	   //Create a new workbook for the output excel  
-	         HSSFWorkbook workBookOut = new HSSFWorkbook();  
-	           
-	         //Create a new Sheet in the output excel workbook  
-	         HSSFSheet sheetOut = workBookOut.createSheet("Remove Duplicates");  
-	         HSSFRow[] row = new HSSFRow[s.size()];  
-	         int rowCount=0;  
-	         int cellCount=0;  
-	   while(iter.hasNext()){  
-	    cellCount=0;  
-	    row[rowCount] = sheetOut.createRow(rowCount);  
-	    result=iter.next().toString();  
-	    System.out.println(result);  
-	    st=new StringTokenizer(result," ");  
-	    HSSFCell[] cell= new HSSFCell[st.countTokens()];  
-	    while(st.hasMoreTokens()){  
-	     cell[cellCount]=row[rowCount].createCell((short)cellCount);  
-	     cell[cellCount].setCellValue(st.nextToken());  
-	     ++cellCount;  
-	    }  
-	    ++rowCount;  
-	   }  
-	   FileOutputStream fileOut = new FileOutputStream("c:\\new\\output.xls");  
-	            workBookOut.write(fileOut);  
-	            fileOut.close();  
-	  } catch (IOException ioe) {  
-	   ioe.printStackTrace();  
-	  } 
-	
-	
-	
-	
-	
 	*/
 	
 	
@@ -395,39 +322,7 @@ public class ReviewFetcher {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	
 	}
 

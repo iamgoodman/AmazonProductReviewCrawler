@@ -126,8 +126,18 @@ public class Item {
 					   
 					    	
 						
-						if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
-								datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016")){
+						if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
+								datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
+								|| datetext.equalsIgnoreCase("July 11, 2016")
+								|| datetext.equalsIgnoreCase("July 12, 2016")
+								|| datetext.equalsIgnoreCase("July 13, 2016")
+								|| datetext.equalsIgnoreCase("July 14, 2016")
+								
+								
+								
+								)
+						
+						{
 							
 							System.out.println("inside");
 							
@@ -220,8 +230,17 @@ public class Item {
 								        
 								        
 									
-									if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
-											datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016") ){
+										
+										if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
+												datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
+												|| datetext.equalsIgnoreCase("July 11, 2016")
+												|| datetext.equalsIgnoreCase("July 12, 2016")
+												|| datetext.equalsIgnoreCase("July 13, 2016")
+												|| datetext.equalsIgnoreCase("July 14, 2016")
+												
+												
+												
+												){
 									
 										System.out.println("inside");
 										
@@ -323,8 +342,17 @@ public class Item {
 									        
 									        System.out.println(datetext);
 										
-										if(datetext.equalsIgnoreCase("May 13, 2016") || datetext.equalsIgnoreCase("May 14, 2016") ||
-												datetext.equalsIgnoreCase("May 15, 2016") || datetext.equalsIgnoreCase("May 16, 2016") ){
+											
+											if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
+													datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
+													|| datetext.equalsIgnoreCase("July 11, 2016")
+													|| datetext.equalsIgnoreCase("July 12, 2016")
+													|| datetext.equalsIgnoreCase("July 13, 2016")
+													|| datetext.equalsIgnoreCase("July 14, 2016")
+													
+													
+													
+													 ){
 											
 											
 											System.out.println("inside");
@@ -437,9 +465,12 @@ public class Item {
 		// review content
 		Element contentDoc = reviewBlock.select("span.review-text").first();
 		content = contentDoc.text();
+		
 		Review thereview = new Review(theitemID, reviewID, customerName,
 				customerID, title, rating, fullRating, helpfulVotes,
 				totalVotes, verifiedPurchase, realName, reviewDate, content);
+		
+		
         return thereview;
 	}
         

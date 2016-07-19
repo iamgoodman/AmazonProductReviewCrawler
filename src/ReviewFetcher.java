@@ -73,7 +73,7 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
-        String sourceFilePath = "c:\\test1.xls";
+        String sourceFilePath = "c:\\bgc.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -279,8 +279,8 @@ public class ReviewFetcher {
 		
 		
 		
-
-/*	//merge list of genereated prodcut review into a signle file
+/*
+	//merge list of genereated prodcut review into a signle file
 	
 	//location of list of excel files of product reviews
 	 File file = new File("\\Excel2");
@@ -308,13 +308,13 @@ public class ReviewFetcher {
 	  }
       
 	  //out put location of the combined excels of product reviews
-        File f = new File("c:\\new\\resultforBGC-5-13-16.xls"); 
+        File f = new File("c:\\new\\resultforBGC-14-17-5-16.xls"); 
 
       //merge
         Mergexls.mergeExcelFiles(f, l);
 	
-
-	*/
+*/
+	
 	
 	
 	

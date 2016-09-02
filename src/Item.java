@@ -26,6 +26,8 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.jsoup.Connection;
+import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -36,7 +38,7 @@ import org.jsoup.select.Elements;
 
 
 public class Item {
-	
+	//item id refer to the ASIN  in this particular program, can be changed. 
 	public String itemID;
 	public ArrayList<Review> reviews;
 	
@@ -56,8 +58,9 @@ public class Item {
 	 * @throws ParseException 
 	 * @throws NoSuchAlgorithmException 
 	 * @throws InvalidKeyException 
+	 * @throws InterruptedException 
 	 */
-	public void fetchReview() throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException {
+	public void fetchReview() throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException, InterruptedException {
 		
 		
 		//this is intended for all pages
@@ -70,10 +73,12 @@ public class Item {
 				+ "/ref=cm_cr_arp_d_viewopt_srt?showViewpoints=0&sortBy=recent&pageNumber" + 1;
 		
 		
+/*	Response c = Jsoup.connect(url).userAgent("Mozilla/17.0").execute();
 		
+		System.out.println(c.statusCode());
+	*/
 		
-		
-		try {
+	/*	try {*/
 			/*// Get the max number of review pages;
 			org.jsoup.nodes.Document reviewpage1 = null;
 			reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
@@ -96,12 +101,49 @@ public class Item {
 						+ "/?sortBy=helpful&pageNumber="
 						+ p;*/
 			
-			
-			
+			    
+			//there is no review page initially 
 				org.jsoup.nodes.Document reviewpage = null;
+		
+				System.out.println("trying for connection");
 				
-                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
+				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 Chrome/26.0.1410.64 Safari/537.31")
+						  .timeout(2*1000)
+						  .followRedirects(true);
+				
+				Response resp = con.execute();
+			
+				int statuscode = resp.statusCode();
+				
+				while(statuscode == 503){
+					
+	
+					System.out.println("error need to reconnect");
+					
+					Thread.sleep(10000);
+					
+					statuscode = Jsoup.connect(url).userAgent("Mozilla/5.0 Chrome/26.0.1410.64 Safari/537.31")
+							  .timeout(2*1000)
+							  .followRedirects(true).execute().statusCode();
+					
+					
+				}
+			
+				if(statuscode == 200)
+				{
+	
+					System.out.println("able to connect ");
+					
+					
+					
+					//in the past if unable to get reconnect try it again, unstable, need to fix robot issue
+					
+					reviewpage = con.get();
                 
+                System.out.println("unable to get exception"+reviewpage.text());
+                
+                
+                //div.a refers to <div> in the review section
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
 					
 					System.out.println(itemID + " " + "no reivew");
@@ -116,30 +158,29 @@ public class Item {
 						
 						  Elements date = reviewBlock.select("span.review-date");
 						  
+	
 					        String datetext = date.first().text();
 					        
-					        datetext= datetext.substring(3);
-					        		
-					        		
-					        System.out.println(datetext);
 					        
-					   
+					        String  datetext1= datetext.substring(3);
+					        
+					        
+					        
+					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
+							
 					    	
-						
-						if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
-								datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
-								|| datetext.equalsIgnoreCase("July 11, 2016")
-								|| datetext.equalsIgnoreCase("July 12, 2016")
-								|| datetext.equalsIgnoreCase("July 13, 2016")
-								|| datetext.equalsIgnoreCase("July 14, 2016")
-								
-								
+							if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
+									datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
+									|| datetext1.equalsIgnoreCase("August 30, 2016")
+									|| datetext1.equalsIgnoreCase("August 31, 2016")
+									|| datetext1.equalsIgnoreCase("September 1, 2016")
+									|| datetext1.equalsIgnoreCase("September 2, 2016")
 								
 								)
 						
 						{
 							
-							System.out.println("inside");
+								System.out.println("Desired date matched"+" " + " Currently  inside of a specific date"+" "+datetext1+" ,"+" "+"I am about to download review for this date");
 							
 							
                         Review theReview = cleanReviewBlock(reviewBlock);
@@ -154,19 +195,25 @@ public class Item {
 					}
 				}
 
-			}
+				}
+				
+			
+				
+				
+		}
 
 		/*}*/ 
 		
-		catch (Exception e) {
+	/*	catch (Exception e) {
 			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
 			
 			
 			try{
 				
 				
-			//when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
-			
+				///when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
+				System.out.println("OOPS, HTTP ERROR" + " " +
+				"Looks like the previous attempt to fetch the review has beem declined by Amazon"  + " " + " Refetching it again.....");
 			// Input to Sign;
 			SignedRequestsHelper helper = new SignedRequestsHelper();
 			
@@ -185,7 +232,7 @@ public class Item {
 			
 			
 			// Get the max number of review pages;
-						/*org.jsoup.nodes.Document reviewpage1 = null;
+						org.jsoup.nodes.Document reviewpage1 = null;
 						reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
 						int maxpage = 1;
 						Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
@@ -204,7 +251,7 @@ public class Item {
 							url = "http://www.amazon.com/product-reviews/"
 									+ itemID
 									+ "/?sortBy=helpful&pageNumber="
-									+ p;*/
+									+ p;
 							org.jsoup.nodes.Document reviewpage = null;
 			                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 							if (reviewpage.select("div.a-section.review").isEmpty()) {
@@ -217,32 +264,35 @@ public class Item {
 									
 									
 									 Elements date = reviewBlock.select("span.review-date");
+									 
 								        String datetext = date.first().text();
 								        
 								        
 								        
-								        datetext= datetext.substring(3);
+								      String  datetext1= datetext.substring(3);
 								        		
-								        		
-								        System.out.println(datetext);
+								       
+								        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 								        
 								    
 								        
 								        
 									
 										
-										if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
-												datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
-												|| datetext.equalsIgnoreCase("July 11, 2016")
-												|| datetext.equalsIgnoreCase("July 12, 2016")
-												|| datetext.equalsIgnoreCase("July 13, 2016")
-												|| datetext.equalsIgnoreCase("July 14, 2016")
+										if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
+												datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
+												|| datetext1.equalsIgnoreCase("August 30, 2016")
+												|| datetext1.equalsIgnoreCase("August 31, 2016")
+												|| datetext1.equalsIgnoreCase("September 1, 2016")
+												|| datetext1.equalsIgnoreCase("September 2, 2016")
 												
 												
 												
-												){
+												)
+										
+										{
 									
-										System.out.println("inside");
+											System.out.println("Desired date matched"+" " + " Currently  inside of a specific date"+" "+datetext1+" ,"+" "+"I am about to download review for this date");
 										
 			                        Review theReview = cleanReviewBlock(reviewBlock);
 			                        
@@ -269,7 +319,7 @@ public class Item {
 			
 			
 			
-		/*}*/
+		}
 		}catch(Exception ex) {
 			
 			//handle exception 
@@ -277,8 +327,9 @@ public class Item {
 			try{
 			
 			
-				//when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
-				
+				///when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
+				System.out.println("OOPS, HTTP ERROR" + " " +
+				"Looks like the previous attempt to fetch the review has beem declined by Amazon"  + " " + " Refetching it again.....");
 				// Input to Sign;
 				SignedRequestsHelper helper = new SignedRequestsHelper();
 				
@@ -297,7 +348,7 @@ public class Item {
 				
 				
 				// Get the max number of review pages;
-						/*	org.jsoup.nodes.Document reviewpage1 = null;
+							org.jsoup.nodes.Document reviewpage1 = null;
 							reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
 							int maxpage = 1;
 							Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
@@ -316,7 +367,7 @@ public class Item {
 								url = "http://www.amazon.com/product-reviews/"
 										+ itemID
 										+ "/?sortBy=helpful&pageNumber="
-										+ p;*/
+										+ p;
 								org.jsoup.nodes.Document reviewpage = null;
 				                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
 				                
@@ -337,25 +388,25 @@ public class Item {
 									        String datetext = date.first().text();
 									        
 									        
-									        datetext= datetext.substring(3);
+									        String  datetext1= datetext.substring(3);
 									        
 									        
-									        System.out.println(datetext);
+									        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 										
 											
-											if(datetext.equalsIgnoreCase("July 8, 2016") || datetext.equalsIgnoreCase("July 9, 2016") ||
-													datetext.equalsIgnoreCase("July 10, 2016") || datetext.equalsIgnoreCase("July 11, 2016") 
-													|| datetext.equalsIgnoreCase("July 11, 2016")
-													|| datetext.equalsIgnoreCase("July 12, 2016")
-													|| datetext.equalsIgnoreCase("July 13, 2016")
-													|| datetext.equalsIgnoreCase("July 14, 2016")
-													
+									    	
+											if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
+													datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
+													|| datetext1.equalsIgnoreCase("August 30, 2016")
+													|| datetext1.equalsIgnoreCase("August 31, 2016")
+													|| datetext1.equalsIgnoreCase("September 1, 2016")
+													|| datetext1.equalsIgnoreCase("September 2, 2016")
 													
 													
 													 ){
 											
 											
-											System.out.println("inside");
+												System.out.println("Desired date matched"+" " + " Currently  inside of a specific date"+" "+datetext1+" ,"+" "+"Now fetching review for this date");
 										
 				                        Review theReview = cleanReviewBlock(reviewBlock);
 				                        
@@ -370,7 +421,7 @@ public class Item {
 				
 				
 							
-						/*	}*/
+							}
 			
 			
 			
@@ -382,7 +433,7 @@ public class Item {
 		}
 		}
 		}
-	}
+	}*/
 
 	/**
 	 * cleans the html block that contains a review
@@ -405,6 +456,7 @@ public class Item {
 		int totalVotes = 0;
 		boolean verifiedPurchase = false;
 		String realName = "N/A"; 
+		String comments;
 
 		String content = "";
 
@@ -466,9 +518,32 @@ public class Item {
 		Element contentDoc = reviewBlock.select("span.review-text").first();
 		content = contentDoc.text();
 		
+		
+		/*//review comment
+		System.out.println("trying for comments");
+		//does not work
+		Elements comment = reviewBlock.select("div.a-row a-spacing-mini review-comments-header");
+		System.out.println("Im here in the comment section");
+		System.out.println("what i get is " + comment.size());
+		if(comment.hasText()){
+		comments = comment.text();
+		System.out.println("Im here and comment is "+comments);
+		}
+		else
+		{
+			comments ="";
+			
+		}*/
+		
+		//temporarily setting comments to be null, will be reset, when implementing commnets section 
+		String comments1 = "";
+				
 		Review thereview = new Review(theitemID, reviewID, customerName,
 				customerID, title, rating, fullRating, helpfulVotes,
-				totalVotes, verifiedPurchase, realName, reviewDate, content);
+				totalVotes, verifiedPurchase, realName, reviewDate, content,comments1);
+		
+		
+		
 		
 		
         return thereview;

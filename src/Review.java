@@ -51,11 +51,12 @@ public class Review implements Comparable<Review> {
 	String realName;
 	Date reviewDate;
 	String content;
+	String comment;
 	
 	public Review(String aitemID, String areviewID, String acustomerName,
 			String acustomerID, String atitle, int arating, int afullRating,
 			int ahelpfulVotes, int atotalVotes, boolean verifiedornot,
-			String realnameornot, Date aReviewDate, String acontent) {
+			String realnameornot, Date aReviewDate, String acontent,String Comment) {
 		itemID = aitemID;
 		reviewID = areviewID;
 		customerName = acustomerName;
@@ -69,10 +70,23 @@ public class Review implements Comparable<Review> {
 		realName = realnameornot;
 		reviewDate = aReviewDate;
 		content = acontent;
+		comment = Comment;
 	}
 	
 	
 	//getter and setter methods 
+	
+	public String getComment() {
+		return comment;
+	}
+
+
+
+	public void setComment(String comments) {
+		this.comment= comments;
+	}
+
+	
 	
 	public String toString() {
 		return ReflectionToStringBuilder.toString(this);

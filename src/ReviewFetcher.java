@@ -73,7 +73,7 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
-        String sourceFilePath = "c:\\bgc.xls";
+        String sourceFilePath = "Y:\\Staffs\\Joey\\Developer\\SKUlist\\test1.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -173,7 +173,8 @@ public class ReviewFetcher {
 		
 
 		
-		System.out.println(anitem.reviews.size());
+		System.out.println("Number of reviews fetched for specified ASIN" + " " + anitem.itemID
+				+ " " + "are" +" " +anitem.reviews.size() + " " + "If you see the size is zero, dont panic =3, the previous request has been rejected. SKU with no review will not be fetched atall");
 		
 //if server denied the reqeust, fetch again, or in case of empty string
 		
@@ -228,9 +229,9 @@ public class ReviewFetcher {
 		        sheet.getRow(0).createCell(5).setCellValue("Is verified Purchase?");
 		        sheet.getRow(0).createCell(6).setCellValue("RealName");
 		        sheet.getRow(0).createCell(7).setCellValue("ReviewDate");
-		        sheet.getRow(0).createCell(8).setCellValue("Comment Header");
-		        sheet.getRow(0).createCell(9).setCellValue("Comment");
-		    
+		        sheet.getRow(0).createCell(8).setCellValue("Review Header");
+		        sheet.getRow(0).createCell(9).setCellValue("Review");
+		        
 
   
                 
@@ -244,7 +245,7 @@ public class ReviewFetcher {
 		        row.createCell(7).setCellValue(r.getReviewDate().toString().substring(3, r.getReviewDate().toString().length()));
 		        row.createCell(8).setCellValue(r.getTitle());
 		        row.createCell(9).setCellValue(r.getContent());
-		        
+		       
 		      
 		        
 		    }
@@ -255,13 +256,12 @@ public class ReviewFetcher {
 		    
 		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream(anitem.itemID + ".xls");
+		    FileOutputStream fileOut = new FileOutputStream("Y:\\Staffs\\Joey\\Developer\\crawled report\\"+anitem.itemID + ".xls");
 		    
 		    
 	        
 		    wb.write(fileOut);
-	        
-		    
+	   
 		    
 	        fileOut.close();
 	        

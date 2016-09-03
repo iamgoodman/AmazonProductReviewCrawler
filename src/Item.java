@@ -139,10 +139,28 @@ public class Item {
 					//in the past if unable to get reconnect try it again, unstable, need to fix robot issue
 					
 					reviewpage = con.get();
-                
+					
+					
+					
+                while(reviewpage.text().contains("Robot"))
+                {
                 System.out.println("unable to get exception"+reviewpage.text());
                 
+                Connection con1 = Jsoup.connect(url).userAgent("Mozilla/5.0 Chrome/26.0.1410.64 Safari/537.31")
+						  .timeout(2*1000)
+						  .followRedirects(true);
                 
+                con1.execute();
+               
+               
+               reviewpage = con1.get();
+                
+                
+                }
+                
+                
+                
+                System.out.println("Passed the exam");
                 //div.a refers to <div> in the review section
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
 					

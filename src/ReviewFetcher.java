@@ -73,7 +73,7 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 		 // Location of the source file
-        String sourceFilePath = "Y:\\Staffs\\Joey\\Developer\\SKUlist\\test1.xls";
+        String sourceFilePath = "test1.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -137,7 +137,7 @@ public class ReviewFetcher {
 	
 	
 {
-		
+		System.out.println(excelData.get(i));
 	
 		//get rid of the curly brackets appeared in the list
 		

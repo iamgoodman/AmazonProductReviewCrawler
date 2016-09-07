@@ -2,12 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/apache-commons-lang.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/httpclient-4.2.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/httpcore.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/jsoup-1.7.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/jsoup-1.9.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/org-apache-commons-codec.jar"/>
-	<classpathentry kind="lib" path="C:/Users/aps-peter/Desktop/poi-3.9.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/apache-commons-lang.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/httpclient-4.2.3.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/httpcore.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/org-apache-commons-codec.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/poi-3.9.jar"/>
+	<classpathentry kind="lib" path="/Users/joey/Desktop/jj/AmazonProductReviewCrawler/jsoup-1.7.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

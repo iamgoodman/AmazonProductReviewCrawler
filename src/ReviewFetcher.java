@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
@@ -72,8 +73,10 @@ public class ReviewFetcher {
 	          
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
+	
+		
 		 // Location of the source file
-        String sourceFilePath = "test1.xls";
+        String sourceFilePath = "iboard.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -190,7 +193,19 @@ public class ReviewFetcher {
 		if(anitem.reviews.isEmpty())
 			
 		{
-		
+			
+			//create a random number to add to time, where 50000 is maxium and 10000 is min
+			Random rand = new Random();
+
+			int  time = rand.nextInt(50000) + 10000;
+			
+			//50 is the maximum and the 1 is our minimum 
+			System.out.println("Going to sleep to avoid being robot");
+			
+			Thread.sleep(10000+time);
+			
+			  System.out.println("Im awake to grab more review");  
+			
 			continue;
 			
 		}
@@ -269,9 +284,17 @@ public class ReviewFetcher {
 	     
 	       System.out.println("file created");
 	
-		    
+	       System.out.println("Going to sleep to avoid being robot");
 	       
-		    
+	     //create a random number to add to time, where 50000 is maxium and 10000 is min
+			Random rand = new Random();
+
+	
+			int  time = rand.nextInt(50000) + 10000;
+			
+	       Thread.sleep(10000+ time);
+	      
+		  System.out.println("Im awake to grab more review");  
     
 		    
 	}

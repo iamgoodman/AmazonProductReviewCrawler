@@ -74,9 +74,10 @@ public class ReviewFetcher {
 //To read input ASINs as excel formatt and parse into java, stored as arrayList
 	
 	
-		
+		//counter to keep track of how many review fetched
+		int count = 0;
 		 // Location of the source file
-        String sourceFilePath = "iboard.xls";
+        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard 417.310.288.205.40.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -85,6 +86,7 @@ public class ReviewFetcher {
           
         try {
               
+        	
             // FileInputStream to read the excel file
             fileInputStream = new FileInputStream(sourceFilePath);
    
@@ -174,42 +176,33 @@ public class ReviewFetcher {
 		
 		anitem.fetchReview();
 		
+     
+	
+		
 
-		
-		System.out.println("Number of reviews fetched for specified ASIN" + " " + anitem.itemID
-				+ " " + "are" +" " +anitem.reviews.size() + " " + "If you see the size is zero, dont panic =3, the previous request has been rejected. SKU with no review will not be fetched atall");
-		
-//if server denied the reqeust, fetch again, or in case of empty string
-		
-		if(anitem.reviews.size()==0){
-		
-		anitem.fetchReview();
-		
-	}
     
 	
-		//if empty after two tries, skip to next iteration
 		
-		if(anitem.reviews.isEmpty())
+		
+		if(anitem.reviews.size()==0||anitem.reviews.isEmpty())
 			
 		{
+			System.out.println("no review fetched for this sku from crawler, skip to next sku in list");
 			
-			//create a random number to add to time, where 50000 is maxium and 10000 is min
-			Random rand = new Random();
-
-			int  time = rand.nextInt(50000) + 10000;
-			
-			//50 is the maximum and the 1 is our minimum 
-			System.out.println("Going to sleep to avoid being robot");
-			
-			Thread.sleep(10000+time);
-			
-			  System.out.println("Im awake to grab more review");  
-			
+			count++;
+			System.out.println("currently at " +count + " " + "in the sku list and this sku has no review");
 			continue;
 			
 		}
+		
+		
+		System.out.println("The SKU" +" " + anitem.itemID + "has "
+		+ " " + anitem.reviews.size() 
+		+ "fetched reviews for specified date,begin to out put to excel.." );
 
+		count++;
+		
+		System.out.println("currently at the " + " " +count+" "+ " th sku in list, begining to sort review date and add to excel");
 		//sort review by date as requested, implemented comparable in itmes, sort in descending order
 		
 		Collections.sort(anitem.reviews);
@@ -271,7 +264,7 @@ public class ReviewFetcher {
 		    
 		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream("Y:\\Staffs\\Joey\\Developer\\crawled report\\"+anitem.itemID + ".xls");
+		    FileOutputStream fileOut = new FileOutputStream("Z:\\Staffs\\Joey\\Developer\\crawled report\\"+anitem.itemID + ".xls");
 		    
 		    
 	        
@@ -283,16 +276,15 @@ public class ReviewFetcher {
 
 	     
 	       System.out.println("file created");
+	       
+	       
 	
 	       System.out.println("Going to sleep to avoid being robot");
-	       
-	     //create a random number to add to time, where 50000 is maxium and 10000 is min
+	   	//craw delay directive value, needs to be 1-30s,create a random number to add to time, where 5000 is maxium and 1000 is min
 			Random rand = new Random();
 
-	
-			int  time = rand.nextInt(50000) + 10000;
+			int  time = rand.nextInt(5000) + 1000;
 			
-	       Thread.sleep(10000+ time);
 	      
 		  System.out.println("Im awake to grab more review");  
     

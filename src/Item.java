@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -28,6 +29,7 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.jsoup.Connection;
 import org.jsoup.Connection.Response;
+import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -107,27 +109,22 @@ public class Item {
 		
 				System.out.println("trying for connection");
 				
-				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 Chrome/26.0.1410.64 Safari/537.31")
-						  .timeout(2*1000)
+				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36")
+						  .timeout(10*1000)
 						  .followRedirects(true);
 				
-				Response resp = con.execute();
-			
+				System.out.println("setting connection time out..");
+				//need connection time out to avoid socket timeout execpeiton
+            	con.timeout(5000);
+            	
+            try{
+            	Response resp = con.execute();
+				
+            
+		
 				int statuscode = resp.statusCode();
 				
-				while(statuscode == 503){
-					
 	
-					System.out.println("error need to reconnect");
-					
-					Thread.sleep(10000);
-					
-					statuscode = Jsoup.connect(url).userAgent("Mozilla/5.0 Chrome/26.0.1410.64 Safari/537.31")
-							  .timeout(2*1000)
-							  .followRedirects(true).execute().statusCode();
-					
-					
-				}
 			
 				if(statuscode == 200)
 				{
@@ -135,41 +132,84 @@ public class Item {
 					System.out.println("able to connect ");
 					
 					
+                	
+					
 					
 					//in the past if unable to get reconnect try it again, unstable, need to fix robot issue
-					
+					//set time out value to avoid get time out
 					reviewpage = Jsoup.connect(url).header("User-Agent",
 		                    "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-							.timeout(10*1000).get();
+							.timeout(60*1000).get();
 					
-					
+					//robot counter
+					int rcount = 0;
 					
                 while(reviewpage.text().contains("Robot"))
                 {
+                	System.out.println("unable to get exception"+reviewpage.text());
+            
+                	System.out.println("Robot Detection, pausing connection..");
                 	
-                	con.timeout(1000);
+                	con.timeout(5000);
                 	
-                System.out.println("unable to get exception"+reviewpage.text());
-                
                
-                
-                
-           
-               
+                	//craw delay directive value, needs to be 1-30s,create a random number to add to time, where 5000 is maxium and 1000 is min
+        			Random rand = new Random();
+
+        			int  time = rand.nextInt(30000) + 10000;
+        			
+        			//8000mm is the maximum and the 1500mm is our minimum 
+        			System.out.println("Robot Detection, need to sleep for a long time, pausing program...");
+        			
+        			Thread.sleep(1000+time);
+        			
+        			  System.out.println("Im awake to grab more review"); 
+
+        			  
                reviewpage = Jsoup.connect(url).header("User-Agent",
-                       "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2").get();
+            		   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36").timeout(60*1000).get();
                 
+           	
+               		rcount++;
+               
+            	//if robot check has occured 5 times
+           	if(rcount == 5)
+           	{
+           		
+           		System.out.println("Oh no, Robot prevention overload, need to wait pause and wait for even longer.....");
+           
+           		con.timeout(60000);
+           		
+           		
+           		Thread.sleep(100000);
+           		
+          
+           		
+           	 //reset counter
+           	 rcount = 0;
+           		
+           	}
+           	
+           	
                 }
                 
                 
                 
-                System.out.println("Passed the exam");
+                System.out.println("Passed the robot test validation, fetching ");
+                
+                
                 //div.a refers to <div> in the review section
+                
+            
+    			  
+    			  
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
 					
-					System.out.println(itemID + " " + "no reivew");
+					System.out.println(itemID + " " + "has no review at all in html revie tag, no review will be fetched");
+							
 					
 				} else {
+					System.out.println(itemID+ " " + "review fetched, picking the deisred dates..");
 					Elements reviewsHTMLs = reviewpage.select(
 							"div.a-section.review");
 					
@@ -215,246 +255,50 @@ public class Item {
 						
 					}
 				}
+				
+				
+			//craw delay directive value, needs to be 1-30s,create a random number to add to time, where 5000 is maxium and 1000 is min
+    			Random rand = new Random();
+
+    			int  time = rand.nextInt(5000) + 1000;
+    			
+    			
+    			
+    			System.out.println("Going to sleep to avoid being robot");
+    			
+    			Thread.sleep(1000+time);
+    			
+    			 System.out.println("Im awake to grab more review");  
 
 				}
 				
-			
+				else{
+					
+					//non 202 successful connection, might not be necessary, just incase
+					System.out.println("Not sucessfully connected, getting non 202 resp, it is " + " "
+					+resp.statusCode()+ " " + "Move on to next sku in list, admin please log this sku");
+					
+					return;
+				}
+				
+            }
+            //catch non 202 connections 
+            
+            catch(HttpStatusException e){
+            	
+            	System.out.println("Unable to establish connection, sku might no longer exists, exception code" + e.toString()+ " "
+            			+ "will move on to next sku in list" + " "
+            			+ "Admin please log this sku");
+				
+			return;
+	
+            }
 				
 				
 		}
 
-		/*}*/ 
-		
-	/*	catch (Exception e) {
-			System.out.println(itemID + " " + "Exception" + " " + e.getClass());
-			
-			
-			try{
-				
-				
-				///when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
-				System.out.println("OOPS, HTTP ERROR" + " " +
-				"Looks like the previous attempt to fetch the review has beem declined by Amazon"  + " " + " Refetching it again.....");
-			// Input to Sign;
-			SignedRequestsHelper helper = new SignedRequestsHelper();
-			
-			Map<String, String> variablemap = new HashMap<String, String>();
-			//*****ADD YOUR AssociateTag HERE*****
-			variablemap.put("AssociateTag", "");
-			variablemap.put("Operation", "ItemLookup");
-			variablemap.put("Service", "AWSECommerceService");
-			variablemap.put("ItemId",itemID);
-			variablemap.put("ResponseGroup", "Large");
-
-			// Sign and get the REST url;
-		
-			helper.sign(variablemap);
-			
-			
-			
-			// Get the max number of review pages;
-						org.jsoup.nodes.Document reviewpage1 = null;
-						reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
-						int maxpage = 1;
-						Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
-						if (pagelinks.size() != 0) {
-							ArrayList<Integer> pagenum = new ArrayList<Integer>();
-							for (Element link : pagelinks) {
-								try {
-									pagenum.add(Integer.parseInt(link.text()));
-								} catch (NumberFormatException nfe) {
-								}
-							}
-							maxpage = Collections.max(pagenum);
-						}
-						// collect review from each of the review pages;
-						for (int p = 1; p <= maxpage; p = p + 1) {
-							url = "http://www.amazon.com/product-reviews/"
-									+ itemID
-									+ "/?sortBy=helpful&pageNumber="
-									+ p;
-							org.jsoup.nodes.Document reviewpage = null;
-			                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
-							if (reviewpage.select("div.a-section.review").isEmpty()) {
-								System.out.println(itemID + " " + "no reivew");
-							} else {
-								Elements reviewsHTMLs = reviewpage.select(
-										"div.a-section.review");
-								
-								for (Element reviewBlock : reviewsHTMLs) {
-									
-									
-									 Elements date = reviewBlock.select("span.review-date");
-									 
-								        String datetext = date.first().text();
-								        
-								        
-								        
-								      String  datetext1= datetext.substring(3);
-								        		
-								       
-								        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
-								        
-								    
-								        
-								        
-									
-										
-										if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
-												datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
-												|| datetext1.equalsIgnoreCase("August 30, 2016")
-												|| datetext1.equalsIgnoreCase("August 31, 2016")
-												|| datetext1.equalsIgnoreCase("September 1, 2016")
-												|| datetext1.equalsIgnoreCase("September 2, 2016")
-												
-												
-												
-												)
-										
-										{
-									
-											System.out.println("Desired date matched"+" " + " Currently  inside of a specific date"+" "+datetext1+" ,"+" "+"I am about to download review for this date");
-										
-			                        Review theReview = cleanReviewBlock(reviewBlock);
-			                        
-									this.addReview(theReview);
-									
-									}
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-									
-								}
-							}
-
-			
-			
-						
-			
-			
-			
-		}
-		}catch(Exception ex) {
-			
-			//handle exception 
-			
-			try{
-			
-			
-				///when HTTPStatus Exception is thrown, need to resign to keep fetching the data.
-				System.out.println("OOPS, HTTP ERROR" + " " +
-				"Looks like the previous attempt to fetch the review has beem declined by Amazon"  + " " + " Refetching it again.....");
-				// Input to Sign;
-				SignedRequestsHelper helper = new SignedRequestsHelper();
-				
-				Map<String, String> variablemap = new HashMap<String, String>();
-				//*****ADD YOUR AssociateTag HERE*****
-				variablemap.put("AssociateTag", "");
-				variablemap.put("Operation", "ItemLookup");
-				variablemap.put("Service", "AWSECommerceService");
-				variablemap.put("ItemId",itemID);
-				variablemap.put("ResponseGroup", "Large");
-
-				// Sign and get the REST url;
-			
-				helper.sign(variablemap);
-				
-				
-				
-				// Get the max number of review pages;
-							org.jsoup.nodes.Document reviewpage1 = null;
-							reviewpage1 = Jsoup.connect(url).timeout(10*1000).get();
-							int maxpage = 1;
-							Elements pagelinks = reviewpage1.select("a[href*=pageNumber=]");
-							if (pagelinks.size() != 0) {
-								ArrayList<Integer> pagenum = new ArrayList<Integer>();
-								for (Element link : pagelinks) {
-									try {
-										pagenum.add(Integer.parseInt(link.text()));
-									} catch (NumberFormatException nfe) {
-									}
-								}
-								maxpage = Collections.max(pagenum);
-							}
-							// collect review from each of the review pages;
-							for (int p = 1; p <= maxpage; p = p + 1) {
-								url = "http://www.amazon.com/product-reviews/"
-										+ itemID
-										+ "/?sortBy=helpful&pageNumber="
-										+ p;
-								org.jsoup.nodes.Document reviewpage = null;
-				                reviewpage = Jsoup.connect(url).timeout(10*1000).get();
-				                
-								if (reviewpage.select("div.a-section.review").isEmpty()) {
-									System.out.println(itemID + " " + "no reivew");
-								} 
-								
-								else {
-									Elements reviewsHTMLs = reviewpage.select(
-											"div.a-section.review");
-									for (Element reviewBlock : reviewsHTMLs) {
-										
-										
-										
-										
-										
-										 Elements date = reviewBlock.select("span.review-date");
-									        String datetext = date.first().text();
-									        
-									        
-									        String  datetext1= datetext.substring(3);
-									        
-									        
-									        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
-										
-											
-									    	
-											if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
-													datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
-													|| datetext1.equalsIgnoreCase("August 30, 2016")
-													|| datetext1.equalsIgnoreCase("August 31, 2016")
-													|| datetext1.equalsIgnoreCase("September 1, 2016")
-													|| datetext1.equalsIgnoreCase("September 2, 2016")
-													
-													
-													 ){
-											
-											
-												System.out.println("Desired date matched"+" " + " Currently  inside of a specific date"+" "+datetext1+" ,"+" "+"Now fetching review for this date");
-										
-				                        Review theReview = cleanReviewBlock(reviewBlock);
-				                        
-										this.addReview(theReview);
-										
-										}
-										
-			
-									}
-								}
-
-				
-				
-							
-							}
-			
-			
-			
-			
-			
-		    
-		}catch (Exception exx) {
-		    //Handle exception
-		}
-		}
-		}
-	}*/
+	
+	
 
 	/**
 	 * cleans the html block that contains a review

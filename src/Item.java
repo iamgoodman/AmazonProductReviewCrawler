@@ -111,7 +111,7 @@ public class Item {
 				System.out.println("trying for connection");
 				
 				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36")
-						  .timeout(10*1000)
+						  .timeout(20000)
 						  .followRedirects(true);
 				
 				System.out.println("setting connection time out..");
@@ -187,7 +187,7 @@ public class Item {
         			           .ignoreContentType(true)
         			           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")  
         			           .referrer("http://www.google.com")   
-        			           .timeout(12000) 
+        			           .timeout(24000) 
         			           .followRedirects(true)
         			           .execute();
         			  

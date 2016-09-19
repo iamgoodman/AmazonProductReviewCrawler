@@ -77,7 +77,7 @@ public class ReviewFetcher {
 		//counter to keep track of how many review fetched
 		int count = 0;
 		 // Location of the source file
-        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard 417.310.288.205.40.xls";
+        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard.1171.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -264,7 +264,7 @@ public class ReviewFetcher {
 		    
 		    
 		  
-		    FileOutputStream fileOut = new FileOutputStream("Z:\\Staffs\\Joey\\Developer\\crawled report\\"+anitem.itemID + ".xls");
+		    FileOutputStream fileOut = new FileOutputStream("Z:\\Staffs\\Joey\\Developer\\crawled report\\BGC\\"+anitem.itemID + ".xls");
 		    
 		    
 	        

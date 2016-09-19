@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketTimeoutException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -116,7 +117,15 @@ public class Item {
 				System.out.println("setting connection time out..");
 				//need connection time out to avoid socket timeout execpeiton
             	con.timeout(5000);
+    
+          //while loop to allow reconnect inorder to solve socket timeout exception
+            	//maxium tries of while loop
+          int count = 0;
+          int maxtries =3;
             	
+            	
+          while(true)
+          {
             try{
             	Response resp = con.execute();
 				
@@ -137,9 +146,14 @@ public class Item {
 					
 					//in the past if unable to get reconnect try it again, unstable, need to fix robot issue
 					//set time out value to avoid get time out
-					reviewpage = Jsoup.connect(url).header("User-Agent",
-		                    "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-							.timeout(60*1000).get();
+					//set up referr to skip robot detection
+					
+					//waste resource
+					/*reviewpage = Jsoup.connect(url).header("User-Agent",
+		                    "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2").referrer("http://www.google.com")
+							.timeout(60*1000).followRedirects(true).get();*/
+					
+					reviewpage = resp.parse();
 					
 					//robot counter
 					int rcount = 0;
@@ -166,9 +180,21 @@ public class Item {
         			  System.out.println("Im awake to grab more review"); 
 
         			  
-               reviewpage = Jsoup.connect(url).header("User-Agent",
-            		   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36").timeout(60*1000).get();
+        			  //change referrer to pretned not being robot
+        			  //reconnect
+        			  
+        			  Response response= Jsoup.connect(url)
+        			           .ignoreContentType(true)
+        			           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")  
+        			           .referrer("http://www.google.com")   
+        			           .timeout(12000) 
+        			           .followRedirects(true)
+        			           .execute();
+        			  
+            /*   reviewpage = Jsoup.connect(url).header("User-Agent",
+            		   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36").referrer("http://www.google.ca").timeout(70*1000).followRedirects(true).get();*/
                 
+        			  reviewpage = response.parse();
            	
                		rcount++;
                
@@ -206,6 +232,8 @@ public class Item {
 				if (reviewpage.select("div.a-section.review").isEmpty()) {
 					
 					System.out.println(itemID + " " + "has no review at all in html revie tag, no review will be fetched");
+					//break out of the while loop due to no review
+					break;
 							
 					
 				} else {
@@ -225,17 +253,23 @@ public class Item {
 					        
 					        String  datetext1= datetext.substring(3);
 					        
-					        
+					
 					        
 					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 							
 					    	
-							if(datetext1.equalsIgnoreCase("August 26, 2016") || datetext1.equalsIgnoreCase("August 27, 2016") ||
-									datetext1.equalsIgnoreCase("August 28, 2016") || datetext1.equalsIgnoreCase("August 29, 2016") 
-									|| datetext1.equalsIgnoreCase("August 30, 2016")
-									|| datetext1.equalsIgnoreCase("August 31, 2016")
-									|| datetext1.equalsIgnoreCase("September 1, 2016")
-									|| datetext1.equalsIgnoreCase("September 2, 2016")
+							if(datetext1.equalsIgnoreCase("September 3, 2016") || datetext1.equalsIgnoreCase("September 4, 2016") ||
+									datetext1.equalsIgnoreCase("September 5, 2016") || datetext1.equalsIgnoreCase("September 6, 2016") 
+									|| datetext1.equalsIgnoreCase("September 7, 2016")
+									|| datetext1.equalsIgnoreCase("September 8, 2016")
+									|| datetext1.equalsIgnoreCase("September 9, 2016")
+									|| datetext1.equalsIgnoreCase("September 10, 2016")
+									|| datetext1.equalsIgnoreCase("September 11, 2016")
+									|| datetext1.equalsIgnoreCase("September 12, 2016")
+									|| datetext1.equalsIgnoreCase("September 13, 2016")
+									|| datetext1.equalsIgnoreCase("September 14, 2016")
+									|| datetext1.equalsIgnoreCase("September 15, 2016")
+									
 								
 								)
 						
@@ -249,6 +283,8 @@ public class Item {
                         
 						this.addReview(theReview);
 						
+						//sucessfully added to item break out of the while loop
+						break;
 						
 						}
 					
@@ -269,6 +305,9 @@ public class Item {
     			Thread.sleep(1000+time);
     			
     			 System.out.println("Im awake to grab more review");  
+    			 
+    			//break out of the loop for the single item
+    			 break;
 
 				}
 				
@@ -293,9 +332,23 @@ public class Item {
 			return;
 	
             }
-				
+		
+            //catch socket timeout exception
+            catch(SocketTimeoutException e){
+            	
+            	
+            	System.out.println("socket excpetion" + " " + e);
+            	
+            	//exception is handled by retry, 
+            	System.out.println("establishing reconnection....");
+            	  //allow maxium connection of 3 times
+                if (++count == maxtries) throw e;
+            	
+            }
 				
 		}
+          
+	}
 
 	
 	

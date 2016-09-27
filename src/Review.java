@@ -3,7 +3,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
-
+/**
+ * Review class to store necessary info 
+ * @author Feiyi(Joey) Xiang 
+ *         
+ */
 public class Review implements Comparable<Review> {
 	/**
 	 * All the pieces in a review on Amazon.com

@@ -37,7 +37,11 @@ import org.w3c.dom.NodeList;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-
+/**
+ * Process Reviews class
+ * @author Feiyi(Joey) Xiang 
+ *         
+ */
 
 
 public class Item {
@@ -75,6 +79,48 @@ public class Item {
 		String url = "http://www.amazon.com/product-reviews/" + itemID
 				+ "/ref=cm_cr_arp_d_viewopt_srt?showViewpoints=0&sortBy=recent&pageNumber" + 1;
 		
+		//list of user agent for user agent spoofing
+		
+		ArrayList<String> ua = new ArrayList<String>();
+		
+/*      ua.add("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1 ");
+      ua.add("Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 ");
+      ua.add("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36 ");
+      ua.add("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3a) Gecko/20021207 Phoenix/0.5 ");
+      ua.add("Mozilla/5.0 (Windows NT 5.2; RW; rv:7.0a1) Gecko/20091211 SeaMonkey/9.23a1pre");
+      ua.add("Surf/0.4.1 (X11; U; Unix; en-US) AppleWebKit/531.2+ Compatible (Safari; MSIE 9.0)");*/
+      
+      
+		
+      ua.add("Mozilla/5.0 (compatible; U; ABrowse 0.6; Syllable) AppleWebKit/420+ (KHTML, like Gecko)");
+      ua.add("Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Acoo Browser 1.98.744; .NET CLR 3.5.30729) ");
+      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)");
+      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; America Online Browser 1.1; rev1.5; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727) ");
+      ua.add("Mozilla/4.0 (compatible; MSIE 6.0; America Online Browser 1.1; Windows NT 5.1; SV1; HbTools 4.7.0)");
+      ua.add("Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.27; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)");
+      
+      ua.add("Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.19; Windows NT 5.1; Trident/4.0; GTB7.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729) ");
+      ua.add("Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30 ChromePlus/1.6.3.1");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.224 Safari/534.10 ChromePlus/1.5.2.0");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.6b) Gecko/20031212 Firebird/0.7+ ");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; x64; fr; rv:1.9.2.13) Gecko/20101203 Firebird/3.6.13");
+      ua.add("Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko");
+      
+      ua.add("Mozilla/1.22 (compatible; MSIE 10.0; Windows 3.1) ");
+      ua.add("Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; Media Center PC 6.0; InfoPath.3; MS-RTC LM 8; Zune 4.7) ");
+      ua.add("Lynx/2.8.8dev.3 libwww-FM/2.14 SSL-MM/1.4.1 ");
+      ua.add("Lynx/2.8.7dev.4 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.8d ");
+      ua.add("Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16");
+      ua.add("Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02)");
+      
+      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MyIE2; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0) ");
+      ua.add("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/533.1 (KHTML, like Gecko) Maxthon/3.0.8.2 Safari/533.1");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Maxthon/3.0.6.27 Safari/532.4");
+      ua.add("Mozilla/5.0 (X11; U; Linux i686; pt-BR) AppleWebKit/533.3 (KHTML, like Gecko) Navscape/Pre-0.2 Safari/533.3");
+      ua.add("Mozilla/5.0 (Windows; U; Windows NT 5.1; pt-BR) AppleWebKit/534.12 (KHTML, like Gecko) Navscape/Pre-0.1 Safari/534.12");
+		
+		
 		
 /*	Response c = Jsoup.connect(url).userAgent("Mozilla/17.0").execute();
 		
@@ -110,7 +156,7 @@ public class Item {
 		
 				System.out.println("trying for connection");
 				
-				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36")
+				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (Future Star Technologies Corp.; Star-Blade OS; x86_64; U; en-US) iNet Browser 4.7")
 						  .timeout(20000)
 						  .followRedirects(true);
 				
@@ -121,7 +167,7 @@ public class Item {
           //while loop to allow reconnect inorder to solve socket timeout exception
             	//maxium tries of while loop
           int count = 0;
-          int maxtries =3;
+          int maxtries =10;
             	
             	
           while(true)
@@ -182,10 +228,10 @@ public class Item {
         			  
         			  //change referrer to pretned not being robot
         			  //reconnect
-        			  
+        			  //change user agent with rcount each time it reconnects
         			  Response response= Jsoup.connect(url)
         			           .ignoreContentType(true)
-        			           .userAgent("Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0")  
+        			           .userAgent(ua.get(rcount))  
         			           .referrer("http://www.google.com")   
         			           .timeout(24000) 
         			           .followRedirects(true)
@@ -199,7 +245,7 @@ public class Item {
                		rcount++;
                
             	//if robot check has occured 5 times
-           	if(rcount == 5)
+           	if(rcount == 23)
            	{
            		
            		System.out.println("Oh no, Robot prevention overload, need to wait pause and wait for even longer.....");
@@ -258,17 +304,13 @@ public class Item {
 					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 							
 					    	
-							if(datetext1.equalsIgnoreCase("September 3, 2016") || datetext1.equalsIgnoreCase("September 4, 2016") ||
-									datetext1.equalsIgnoreCase("September 5, 2016") || datetext1.equalsIgnoreCase("September 6, 2016") 
-									|| datetext1.equalsIgnoreCase("September 7, 2016")
-									|| datetext1.equalsIgnoreCase("September 8, 2016")
-									|| datetext1.equalsIgnoreCase("September 9, 2016")
-									|| datetext1.equalsIgnoreCase("September 10, 2016")
-									|| datetext1.equalsIgnoreCase("September 11, 2016")
-									|| datetext1.equalsIgnoreCase("September 12, 2016")
-									|| datetext1.equalsIgnoreCase("September 13, 2016")
-									|| datetext1.equalsIgnoreCase("September 14, 2016")
-									|| datetext1.equalsIgnoreCase("September 15, 2016")
+							if(datetext1.equalsIgnoreCase("September 16, 2016") || datetext1.equalsIgnoreCase("September 17, 2016") ||
+									datetext1.equalsIgnoreCase("September 18, 2016") || datetext1.equalsIgnoreCase("September 19, 2016") 
+									|| datetext1.equalsIgnoreCase("September 20, 2016")
+									|| datetext1.equalsIgnoreCase("September 21, 2016")
+									|| datetext1.equalsIgnoreCase("September 22, 2016")
+									|| datetext1.equalsIgnoreCase("September 23, 2016")
+									
 									
 								
 								)
@@ -317,7 +359,7 @@ public class Item {
 					System.out.println("Not sucessfully connected, getting non 202 resp, it is " + " "
 					+resp.statusCode()+ " " + "Move on to next sku in list, admin please log this sku");
 					
-					return;
+					return ;
 				}
 				
             }

@@ -22,9 +22,10 @@ import org.apache.commons.codec.binary.Base64;
 
 /**
  * This class provides methods to digitally sign a REST request for Product Advertising API
- * @author Based on templates provided by Amazon.com 
+ * @author Feiyi(Joey) Xiang Based on templates provided by Amazon.com 
  *         
  */
+
 public class SignedRequestsHelper {
 	private static final String UTF8_CHARSET = "UTF-8";
 	private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
@@ -33,9 +34,10 @@ public class SignedRequestsHelper {
 
 	private String endpoint = "webservices.amazon.com"; // must be lowercase
 	// KeyId and SecretKey aws ccount;
-    private String awsAccessKeyId = "0";
-    private String awsSecretKey = "0";
-
+	 private String awsAccessKeyId = "0";
+     private String awsSecretKey = "0";
+     
+     
 	private SecretKeySpec secretKeySpec = null;
 	private Mac mac = null;
 

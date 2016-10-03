@@ -6,16 +6,25 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.SocketTimeoutException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -48,6 +57,48 @@ public class Item {
 	//item id refer to the ASIN  in this particular program, can be changed. 
 	public String itemID;
 	public ArrayList<Review> reviews;
+	//list of user agent for user agent spoofing
+	public ArrayList<String> ua = new ArrayList<String>(
+		Arrays.asList(
+				
+				"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1 ",
+				"Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 ",
+				"Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36 ",
+				"Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3a) Gecko/20021207 Phoenix/0.5 ",
+				"Mozilla/5.0 (Windows NT 5.2; RW; rv:7.0a1) Gecko/20091211 SeaMonkey/9.23a1pre",
+				"Surf/0.4.1 (X11; U; Unix; en-US) AppleWebKit/531.2+ Compatible (Safari; MSIE 9.0)",
+				"Mozilla/5.0 (compatible; U; ABrowse 0.6; Syllable) AppleWebKit/420+ (KHTML, like Gecko)",
+				"Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Acoo Browser 1.98.744; .NET CLR 3.5.30729) ",
+				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)",
+				"Mozilla/4.0 (compatible; MSIE 7.0; America Online Browser 1.1; rev1.5; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727) ",
+				"Mozilla/4.0 (compatible; MSIE 6.0; America Online Browser 1.1; Windows NT 5.1; SV1; HbTools 4.7.0)",
+				"Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.27; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)",
+				"Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.19; Windows NT 5.1; Trident/4.0; GTB7.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729) ",
+				"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30 ChromePlus/1.6.3.1",
+				"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.224 Safari/534.10 ChromePlus/1.5.2.0",
+				"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.6b) Gecko/20031212 Firebird/0.7+ ",
+				"Mozilla/5.0 (Windows; U; Windows NT 6.1; x64; fr; rv:1.9.2.13) Gecko/20101203 Firebird/3.6.13",
+				"Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko",
+				"Mozilla/1.22 (compatible; MSIE 10.0; Windows 3.1) ",
+				"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; Media Center PC 6.0; InfoPath.3; MS-RTC LM 8; Zune 4.7) ",
+				"Lynx/2.8.8dev.3 libwww-FM/2.14 SSL-MM/1.4.1 ",
+				"Lynx/2.8.7dev.4 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.8d ",
+				"Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16",
+				"Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02)",
+				"Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MyIE2; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0) ",
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10",
+				"Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/533.1 (KHTML, like Gecko) Maxthon/3.0.8.2 Safari/533.1",
+				"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Maxthon/3.0.6.27 Safari/532.4",
+				"Mozilla/5.0 (X11; U; Linux i686; pt-BR) AppleWebKit/533.3 (KHTML, like Gecko) Navscape/Pre-0.2 Safari/533.3",
+				"Mozilla/5.0 (Windows; U; Windows NT 5.1; pt-BR) AppleWebKit/534.12 (KHTML, like Gecko) Navscape/Pre-0.1 Safari/534.12"
+				
+
+				)
+		
+			
+			
+			);
+	
 	
 	
 	public Item(String theitemid) {
@@ -59,6 +110,8 @@ public class Item {
 		reviews.add(thereview);
 	}
 
+	
+	
 	/**
 	 * Fetch all reviews for the item from Amazon.com
 	 * @throws IOException 
@@ -67,7 +120,7 @@ public class Item {
 	 * @throws InvalidKeyException 
 	 * @throws InterruptedException 
 	 */
-	public void fetchReview() throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException, InterruptedException {
+	public void fetchReview(Hashtable<String, Integer>ht) throws IOException, ParseException, InvalidKeyException, NoSuchAlgorithmException, InterruptedException {
 		
 		
 		//this is intended for all pages
@@ -79,47 +132,18 @@ public class Item {
 		String url = "http://www.amazon.com/product-reviews/" + itemID
 				+ "/ref=cm_cr_arp_d_viewopt_srt?showViewpoints=0&sortBy=recent&pageNumber" + 1;
 		
-		//list of user agent for user agent spoofing
+        //key for hash table
+		String keyht;
+		//Value for hash table
+		Integer valueht;
+		//string for buffer reader
+		String str;
+
+	     //iterator over hash table
+		Iterator<Entry<String, Integer>> entries = ht.entrySet().iterator();
 		
-		ArrayList<String> ua = new ArrayList<String>();
-		
-/*      ua.add("Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.1 ");
-      ua.add("Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25 ");
-      ua.add("Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2226.0 Safari/537.36 ");
-      ua.add("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.3a) Gecko/20021207 Phoenix/0.5 ");
-      ua.add("Mozilla/5.0 (Windows NT 5.2; RW; rv:7.0a1) Gecko/20091211 SeaMonkey/9.23a1pre");
-      ua.add("Surf/0.4.1 (X11; U; Unix; en-US) AppleWebKit/531.2+ Compatible (Safari; MSIE 9.0)");*/
-      
-      
-		
-      ua.add("Mozilla/5.0 (compatible; U; ABrowse 0.6; Syllable) AppleWebKit/420+ (KHTML, like Gecko)");
-      ua.add("Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; Acoo Browser 1.98.744; .NET CLR 3.5.30729) ");
-      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Acoo Browser; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0; .NET CLR 3.0.04506)");
-      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; America Online Browser 1.1; rev1.5; Windows NT 5.1; .NET CLR 1.1.4322; .NET CLR 2.0.50727) ");
-      ua.add("Mozilla/4.0 (compatible; MSIE 6.0; America Online Browser 1.1; Windows NT 5.1; SV1; HbTools 4.7.0)");
-      ua.add("Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.27; Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729)");
-      
-      ua.add("Mozilla/4.0 (compatible; MSIE 8.0; AOL 9.7; AOLBuild 4343.19; Windows NT 5.1; Trident/4.0; GTB7.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729) ");
-      ua.add("Mozilla/5.0 (Windows NT 5.1) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.122 Safari/534.30 ChromePlus/1.6.3.1");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/534.10 (KHTML, like Gecko) Chrome/8.0.552.224 Safari/534.10 ChromePlus/1.5.2.0");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.6b) Gecko/20031212 Firebird/0.7+ ");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; x64; fr; rv:1.9.2.13) Gecko/20101203 Firebird/3.6.13");
-      ua.add("Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko");
-      
-      ua.add("Mozilla/1.22 (compatible; MSIE 10.0; Windows 3.1) ");
-      ua.add("Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0; SLCC2; Media Center PC 6.0; InfoPath.3; MS-RTC LM 8; Zune 4.7) ");
-      ua.add("Lynx/2.8.8dev.3 libwww-FM/2.14 SSL-MM/1.4.1 ");
-      ua.add("Lynx/2.8.7dev.4 libwww-FM/2.14 SSL-MM/1.4.1 OpenSSL/0.9.8d ");
-      ua.add("Opera/9.80 (X11; Linux i686; Ubuntu/14.10) Presto/2.12.388 Version/12.16");
-      ua.add("Opera/12.80 (Windows NT 5.1; U; en) Presto/2.10.289 Version/12.02)");
-      
-      ua.add("Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; MyIE2; SLCC1; .NET CLR 2.0.50727; Media Center PC 5.0) ");
-      ua.add("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_3) AppleWebKit/534.55.3 (KHTML, like Gecko) Version/5.1.3 Safari/534.53.10");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.0; en-US) AppleWebKit/533.1 (KHTML, like Gecko) Maxthon/3.0.8.2 Safari/533.1");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/532.4 (KHTML, like Gecko) Maxthon/3.0.6.27 Safari/532.4");
-      ua.add("Mozilla/5.0 (X11; U; Linux i686; pt-BR) AppleWebKit/533.3 (KHTML, like Gecko) Navscape/Pre-0.2 Safari/533.3");
-      ua.add("Mozilla/5.0 (Windows; U; Windows NT 5.1; pt-BR) AppleWebKit/534.12 (KHTML, like Gecko) Navscape/Pre-0.1 Safari/534.12");
-		
+		 //iterator over hash table to keep a copy to keep track of the beginning, in case iterator has iterated all of the sets.
+		Iterator<Entry<String, Integer>> entries1 = ht.entrySet().iterator();
 		
 		
 /*	Response c = Jsoup.connect(url).userAgent("Mozilla/17.0").execute();
@@ -156,10 +180,11 @@ public class Item {
 		
 				System.out.println("trying for connection");
 				
-				Connection con = Jsoup.connect(url).userAgent("Mozilla/5.0 (Future Star Technologies Corp.; Star-Blade OS; x86_64; U; en-US) iNet Browser 4.7")
+				Connection con = Jsoup.connect(url).userAgent( "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
 						  .timeout(20000)
 						  .followRedirects(true);
 				
+			
 				System.out.println("setting connection time out..");
 				//need connection time out to avoid socket timeout execpeiton
             	con.timeout(5000);
@@ -201,11 +226,38 @@ public class Item {
 					
 					reviewpage = resp.parse();
 					
-					//robot counter
+					//robot counter,also counter for list of useragent headers
 					int rcount = 0;
+				
+					
 					
                 while(reviewpage.text().contains("Robot"))
                 {
+                	//if there is a proxy, get it and move to the next
+                	if(entries.hasNext()){
+				
+					Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>)entries.next();
+					
+					 keyht = (String)entry.getKey();
+					 valueht = (Integer)entry.getValue();
+                	
+                	
+               }
+               //if no proxy in the list, reuse the first one from begining 
+               else
+            	   
+               {
+            	   Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>)entries1.next();
+					
+            		 keyht = (String)entry.getKey();
+                	 valueht = (Integer)entry.getValue();
+            	   
+               }
+                	
+                   
+					
+					
+					
                 	System.out.println("unable to get exception"+reviewpage.text());
             
                 	System.out.println("Robot Detection, pausing connection..");
@@ -223,13 +275,46 @@ public class Item {
         			
         			Thread.sleep(1000+time);
         			
-        			  System.out.println("Im awake to grab more review"); 
-
+        			System.out.println("IM awake to grab more reviews");
+        			
+        			
+   ////////////////////////////setting up proxy///     			
+         			System.out.println("Setting up Proxy, mimic user, trying to reconnect....");
+                    
+         			
+       
+        			
+        			//using http for proxy connection
         			  
-        			  //change referrer to pretned not being robot
+        			final URL website = new URL(url);
+        			//setting up proxy using address and key from 
+        			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(keyht, valueht)); // set proxy server and port
+        			HttpURLConnection httpUrlConnetion = (HttpURLConnection) website.openConnection(proxy);
+        			httpUrlConnetion.setRequestProperty("User-Agent", ua.get(rcount));
+        			httpUrlConnetion.setRequestProperty("referrer","http://www.google.com");
+        			httpUrlConnetion.connect();
+        			
+        			// -- Download the website into a buffer
+        			BufferedReader br = new BufferedReader(new InputStreamReader(httpUrlConnetion.getInputStream()));
+        			StringBuilder buffer = new StringBuilder();
+        		
+
+        			while( (str = br.readLine()) != null )
+        			{
+        			    buffer.append(str);
+        			}
+
+        			// -- Parse the buffer with Jsoup
+        			reviewpage = Jsoup.parse(buffer.toString());
+ /////////////////////////////////////////////////////////////////////////
+        			
+        			//original reconnect
+         			
+        		/*	  //change referrer to pretned not being robot
         			  //reconnect
         			  //change user agent with rcount each time it reconnects
         			  Response response= Jsoup.connect(url)
+        					
         			           .ignoreContentType(true)
         			           .userAgent(ua.get(rcount))  
         			           .referrer("http://www.google.com")   
@@ -237,15 +322,15 @@ public class Item {
         			           .followRedirects(true)
         			           .execute();
         			  
-            /*   reviewpage = Jsoup.connect(url).header("User-Agent",
-            		   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36").referrer("http://www.google.ca").timeout(70*1000).followRedirects(true).get();*/
+               reviewpage = Jsoup.connect(url).header("User-Agent",
+            		   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36").referrer("http://www.google.ca").timeout(70*1000).followRedirects(true).get();
                 
-        			  reviewpage = response.parse();
-           	
+        			  reviewpage = response.parse();*/
+///////////////////////////////////////////////////////////////////           	
                		rcount++;
                
             	//if robot check has occured 5 times
-           	if(rcount == 23)
+           	if(rcount == 29)
            	{
            		
            		System.out.println("Oh no, Robot prevention overload, need to wait pause and wait for even longer.....");
@@ -304,15 +389,14 @@ public class Item {
 					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 							
 					    	
-							if(datetext1.equalsIgnoreCase("September 16, 2016") || datetext1.equalsIgnoreCase("September 17, 2016") ||
-									datetext1.equalsIgnoreCase("September 18, 2016") || datetext1.equalsIgnoreCase("September 19, 2016") 
-									|| datetext1.equalsIgnoreCase("September 20, 2016")
-									|| datetext1.equalsIgnoreCase("September 21, 2016")
-									|| datetext1.equalsIgnoreCase("September 22, 2016")
-									|| datetext1.equalsIgnoreCase("September 23, 2016")
-									
-									
-								
+							if(datetext1.equalsIgnoreCase("September 24, 2016") || datetext1.equalsIgnoreCase("September 25, 2016") ||
+									datetext1.equalsIgnoreCase("September 26, 2016") || datetext1.equalsIgnoreCase("September 27, 2016") 
+									|| datetext1.equalsIgnoreCase("September 28, 2016")
+									|| datetext1.equalsIgnoreCase("September 29, 2016")
+									|| datetext1.equalsIgnoreCase("September 30, 2016")
+									|| datetext1.equalsIgnoreCase("October 1, 2016")
+									|| datetext1.equalsIgnoreCase("October 2, 2016")
+	
 								)
 						
 						{

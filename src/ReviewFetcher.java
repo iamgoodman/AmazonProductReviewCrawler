@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.Map;
@@ -78,7 +79,16 @@ public class ReviewFetcher {
 	
 
 	
+		//initialize hashtable
+		final Hashtable<String, Integer> ht = new Hashtable<String, Integer>();
 		
+		//add proxy list to hash table
+		ht.put("137.135.166.225", 8133);
+		ht.put("52.43.200.172", 1080);
+		ht.put("8.38.145.178", 48111);
+		ht.put("45.40.143.57", 80);
+		ht.put("68.100.232.240", 44180);
+		ht.put("52.59.23.236", 80);
 		
 		
 		
@@ -92,7 +102,7 @@ public class ReviewFetcher {
 		//using class to increment
 		final FinalCounter count = new FinalCounter(0);
 		 // Location of the source file
-        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard501.701.xls";
+        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\bgc.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -151,7 +161,7 @@ public class ReviewFetcher {
         }
 			
 
-	
+
 	
 //Get rid of curly brackets in data of the formatted arraylist and input into data item to begin fetching product review
 		
@@ -191,7 +201,12 @@ public class ReviewFetcher {
 	    	/*	System.out.println(excelData.get(i));*/
 	        	
 	        	//new 
-	        	System.out.println(itemid);
+	        	System.out.println("Parrallel execution begin to execute " +
+	        			itemid + " " + "is now entering to the thread pool. Threadpool allows 5 itemids to be executed at once. Once full," +
+	        					"an new item id will be only added after at least one of the item id in the pool is completed"
+	        			+ " " + "Please note this program is utilized in a way such the completion of tasks is not in order for effeiency purpose"
+	        					+ " as soon as one item id  has been fetched/completed among the 5, a new item id will be added immidiately." 
+	        					);
 	        	
 	    		
 	    		//get rid of the curly brackets appeared in the list
@@ -223,7 +238,7 @@ public class ReviewFetcher {
 	    		helper.sign(variablemap);
 	    		
 	    		
-	    		anitem.fetchReview();
+	    		anitem.fetchReview(ht);
 	        	
 	    		
 	    		
@@ -356,7 +371,7 @@ public class ReviewFetcher {
         	  String result = completionService.take().get(); // find the first completed task
             
         	  
-        	  System.out.println("Fetched content empty/full for " +excelData.get(i)+" " + "Has arrived");
+        	  System.out.println("Fetched content (empty/full)for " +excelData.get(i)+" " + "Has arrived");
           /*   if(result :anItem){
             	
             	 System.out.println("this completed task has no review, null returned by previous one");
@@ -371,7 +386,11 @@ public class ReviewFetcher {
           }
       }
     
+
+	System.out.println("All goood things come to an end, we are now at the end of the parallel execution" +
+			", all files should have been fetched, executor shutting down...");
 	
+	pool.shutdown();
 
     
 		    
@@ -416,7 +435,7 @@ public class ReviewFetcher {
 	
 */
 	
-	
+
 	
 	
 	}

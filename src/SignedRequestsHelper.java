@@ -46,6 +46,9 @@ public class SignedRequestsHelper {
 		byte[] secretyKeyBytes = awsSecretKey.getBytes(UTF8_CHARSET);
 		secretKeySpec = new SecretKeySpec(secretyKeyBytes,
 				HMAC_SHA256_ALGORITHM);
+		
+		
+		
 		mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
 		mac.init(secretKeySpec);
 	}

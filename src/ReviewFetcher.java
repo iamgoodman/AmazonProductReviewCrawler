@@ -175,7 +175,7 @@ public class ReviewFetcher {
         System.out.println("Start Work"  + startTime);
         
         //thread pools for the number of tasks to be executed simutineously
-        final ExecutorService pool = Executors.newFixedThreadPool(5);
+        final ExecutorService pool = Executors.newFixedThreadPool(3);
         
         //completon service to check completed tasks , avoided blocking, does not need to sit and wait around for the first to be compelted and then check the second
         final ExecutorCompletionService<String> completionService = new ExecutorCompletionService<>(pool);
@@ -202,10 +202,10 @@ public class ReviewFetcher {
 	        	
 	        	//new 
 	        	System.out.println("Parrallel execution begin to execute " +
-	        			itemid + " " + "is now entering to the thread pool. Threadpool allows 5 itemids to be executed at once. Once full," +
+	        			itemid + " " + "is now entering to the thread pool. Threadpool allows 3 itemids to be executed at once. Once full," +
 	        					"an new item id will be only added after at least one of the item id in the pool is completed"
 	        			+ " " + "Please note this program is utilized in a way such the completion of tasks is not in order for effeiency purpose"
-	        					+ " as soon as one item id  has been fetched/completed among the 5, a new item id will be added immidiately." 
+	        					+ " as soon as one item id  has been fetched/completed among the 3, a new item id will be added immidiately." 
 	        					);
 	        	
 	    		
@@ -392,7 +392,8 @@ public class ReviewFetcher {
 	
 	pool.shutdown();
 
-    
+	  java.util.Date endTime = new java.util.Date();
+      System.out.println("End Work"  + endTime);
 		    
 	}
 	

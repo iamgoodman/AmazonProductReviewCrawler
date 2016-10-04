@@ -198,13 +198,34 @@ public class Item {
           while(true)
           {
             try{
+            	
+            	
             	Response resp = con.execute();
 				
             
 		
 				int statuscode = resp.statusCode();
 				
-	
+	            if(statuscode == 503)
+	            {
+	            	System.out.println("Status 503, Amazon has throttled the response due to too many requests being send, need to slow down.");
+	            	
+	            	Thread.sleep(5000);
+	            	
+	            	System.out.println("slept for 5 seconds, ready to set connection again");
+	            	
+	            	 con = Jsoup.connect(url).userAgent( "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
+							  .timeout(20000)
+							  .followRedirects(true);
+					
+				
+					System.out.println("setting connection time out..");
+					//need connection time out to avoid socket timeout execpeiton
+	            	con.timeout(5000);
+	            	
+	            	
+	            	
+	            }
 			
 				if(statuscode == 200)
 				{
@@ -408,8 +429,8 @@ public class Item {
                         
                         
 						this.addReview(theReview);
-						
-						//sucessfully added to item break out of the while loop
+					
+					
 						break;
 						
 						}
@@ -443,6 +464,9 @@ public class Item {
 					System.out.println("Not sucessfully connected, getting non 202 resp, it is " + " "
 					+resp.statusCode()+ " " + "Move on to next sku in list, admin please log this sku");
 					
+			
+					
+					
 					return ;
 				}
 				
@@ -454,6 +478,8 @@ public class Item {
             	System.out.println("Unable to establish connection, sku might no longer exists, exception code" + e.toString()+ " "
             			+ "will move on to next sku in list" + " "
             			+ "Admin please log this sku");
+				
+     
 				
 			return;
 	

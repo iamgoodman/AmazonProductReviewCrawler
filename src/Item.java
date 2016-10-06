@@ -132,9 +132,9 @@ public class Item {
 		String url = "http://www.amazon.com/product-reviews/" + itemID
 				+ "/ref=cm_cr_arp_d_viewopt_srt?showViewpoints=0&sortBy=recent&pageNumber" + 1;
 		
-        //key for hash table
+        //key for hash table, in this case it is the proxy IP
 		String keyht;
-		//Value for hash table
+		//Value for hash table, in this case it is proxy IP port.
 		Integer valueht;
 		//string for buffer reader
 		String str;

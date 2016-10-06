@@ -100,9 +100,9 @@ public class ReviewFetcher {
 		int count = 0;*/
 		
 		//using class to increment
-		final FinalCounter count = new FinalCounter(0);
+		final FinalCounter count = new FinalCounter(1);
 		 // Location of the source file
-        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\bgc.xls";
+        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard.307.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -201,13 +201,19 @@ public class ReviewFetcher {
 	    	/*	System.out.println(excelData.get(i));*/
 	        	
 	        	//new 
+	        	
+	        	count.increment();
+	        	
 	        	System.out.println("Parrallel execution begin to execute " +
-	        			itemid + " " + "is now entering to the thread pool. Threadpool allows 3 itemids to be executed at once. Once full," +
+	        			itemid + " " + "is now entering to the thread pool."+ "this is " + " " +
+	        			count.getVal()
+	        			+ " " + "In the SKU List." +
+	        			"Threadpool allows 3 itemids to be executed at once. Once full," +
 	        					"an new item id will be only added after at least one of the item id in the pool is completed"
 	        			+ " " + "Please note this program is utilized in a way such the completion of tasks is not in order for effeiency purpose"
 	        					+ " as soon as one item id  has been fetched/completed among the 3, a new item id will be added immidiately." 
 	        					);
-	        	
+	        
 	    		
 	    		//get rid of the curly brackets appeared in the list
 	    		//original version 
@@ -253,8 +259,8 @@ public class ReviewFetcher {
 	    		{
 	    			System.out.println("no review fetched for this sku from crawler, skip to next sku in list");
 	    			
-	    			count.increment();
-	    			System.out.println("currently at " +count.getVal() + " " + "in the sku list and this sku has no review");
+	    		
+	    			System.out.println("currently at " +anitem.itemID+ " " + "in the sku list and this sku has no review");
 	    			return null;
 	    			
 	    		}
@@ -264,9 +270,9 @@ public class ReviewFetcher {
 	    		+ " " + anitem.reviews.size() 
 	    		+ "fetched reviews for specified date,begin to out put to excel.." );
 
-	    		count.increment();
+	    	
 	    		
-	    		System.out.println("currently at the " + " " +count.getVal()+" "+ " th sku in list, begining to sort review date and add to excel");
+	    		System.out.println("currently at the " + " " +anitem.itemID+" "+ " th sku in list, begining to sort review date and add to excel");
 	    		//sort review by date as requested, implemented comparable in itmes, sort in descending order
 	    		
 	    		Collections.sort(anitem.reviews);
@@ -369,9 +375,10 @@ public class ReviewFetcher {
           try {
         	  
         	  String result = completionService.take().get(); // find the first completed task
-            
+           ;
         	  
-        	  System.out.println("Fetched content (empty/full)for " +excelData.get(i)+" " + "Has arrived");
+        	  System.out.println("Fetched content (null/full)for " + " " +excelData.get(i)+" " + "Has arrived" + " "+ result 
+        			  + " "+  "  and Right now we are at" + count.getVal() + "In the SKU LIST");
           /*   if(result :anItem){
             	
             	 System.out.println("this completed task has no review, null returned by previous one");

@@ -206,27 +206,7 @@ public class Item {
 		
 				int statuscode = resp.statusCode();
 				
-	            if(statuscode == 503)
-	            {
-	            	System.out.println("Status 503, Amazon has throttled the response due to too many requests being send, need to slow down.");
-	            	
-	            	Thread.sleep(5000);
-	            	
-	            	System.out.println("slept for 5 seconds, ready to set connection again");
-	            	
-	            	 con = Jsoup.connect(url).userAgent( "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
-							  .timeout(20000)
-							  .followRedirects(true);
-					
-				
-					System.out.println("setting connection time out..");
-					//need connection time out to avoid socket timeout execpeiton
-	            	con.timeout(5000);
-	            	
-	            	
-	            	
-	            }
-			
+
 				if(statuscode == 200)
 				{
 	
@@ -299,11 +279,13 @@ public class Item {
         			System.out.println("IM awake to grab more reviews");
         			
         			
-   ////////////////////////////setting up proxy///     			
-         			System.out.println("Setting up Proxy, mimic user, trying to reconnect....");
+   ////////////////////////////setting up proxy///     
+        			
+        	
+         			System.out.println("Setting up Proxy, mimic user, closing connection, trying to reconnect....");
                     
          			
-       
+                     
         			
         			//using http for proxy connection
         			  
@@ -356,7 +338,7 @@ public class Item {
            		
            		System.out.println("Oh no, Robot prevention overload, need to wait pause and wait for even longer.....");
            
-           		con.timeout(60000);
+           		con.timeout(50000);
            		
            		
            		Thread.sleep(100000);
@@ -461,7 +443,7 @@ public class Item {
 				else{
 					
 					//non 202 successful connection, might not be necessary, just incase
-					System.out.println("Not sucessfully connected, getting non 202 resp, it is " + " "
+					System.out.println("Not sucessfully connected,  it is " + " "
 					+resp.statusCode()+ " " + "Move on to next sku in list, admin please log this sku");
 					
 			
@@ -471,17 +453,41 @@ public class Item {
 				}
 				
             }
-            //catch non 202 connections 
+            //catch response exceptions connections 
             
             catch(HttpStatusException e){
             	
+            	//if execpetion is 503 meaning amazon prevents frequent connection, pause and retry
+	            if(e.getStatusCode() == 503 || e.getStatusCode()  == 500)
+	            {
+	            	//retry after catch
+	            	System.out.println("Status 503, Amazon has throttled the response due to too many requests being send, need to slow down.");
+	            	
+	            	Thread.sleep(5000);
+	            	
+	            	System.out.println("slept for 5 seconds, ready to set connection again");
+	            	
+				con = Jsoup.connect(url).userAgent( "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2")
+							  .timeout(20000)
+							  .followRedirects(true);
+			
+	            	if (++count == maxtries) throw e;
+	            	
+	            }
+			
+	            //else fucntion does not exist terminate
+	            else
+	            {
             	System.out.println("Unable to establish connection, sku might no longer exists, exception code" + e.toString()+ " "
             			+ "will move on to next sku in list" + " "
             			+ "Admin please log this sku");
 				
-     
+                        
+            	
 				
-			return;
+            		return;
+			
+	            }
 	
             }
 		

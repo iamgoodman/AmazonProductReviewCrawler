@@ -392,13 +392,15 @@ public class Item {
 					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 							
 					    	
-							if(datetext1.equalsIgnoreCase("September 24, 2016") || datetext1.equalsIgnoreCase("September 25, 2016") ||
-									datetext1.equalsIgnoreCase("September 26, 2016") || datetext1.equalsIgnoreCase("September 27, 2016") 
-									|| datetext1.equalsIgnoreCase("September 28, 2016")
-									|| datetext1.equalsIgnoreCase("September 29, 2016")
-									|| datetext1.equalsIgnoreCase("September 30, 2016")
-									|| datetext1.equalsIgnoreCase("October 1, 2016")
-									|| datetext1.equalsIgnoreCase("October 2, 2016")
+							if(datetext1.equalsIgnoreCase("May 10, 2015") || datetext1.equalsIgnoreCase("September 7 , 2015") ||
+									datetext1.equalsIgnoreCase("July 14, 2015") || datetext1.equalsIgnoreCase("November 30, 2014") 
+									|| datetext1.equalsIgnoreCase("January 19, 2014")
+									|| datetext1.equalsIgnoreCase("December 11, 2014")
+									|| datetext1.equalsIgnoreCase("April 25, 2016")
+									|| datetext1.equalsIgnoreCase("December 28, 2015")
+									|| datetext1.equalsIgnoreCase("May 26, 2015")
+								
+							
 	
 								)
 						
@@ -413,7 +415,7 @@ public class Item {
 						this.addReview(theReview);
 					
 					
-						break;
+					
 						
 						}
 					

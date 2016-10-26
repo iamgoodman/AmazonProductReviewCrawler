@@ -100,9 +100,10 @@ public class ReviewFetcher {
 		int count = 0;*/
 		
 		//using class to increment
-		final FinalCounter count = new FinalCounter(1);
+		final FinalCounter count = new FinalCounter(0);
+		
 		 // Location of the source file
-        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\iboard.307.xls";
+        String sourceFilePath = "Z:\\Staffs\\Joey\\Developer\\SKUlist\\bgc.xls";
           
         FileInputStream fileInputStream = null;
           
@@ -172,6 +173,7 @@ public class ReviewFetcher {
         
         //async calls
         java.util.Date startTime = new java.util.Date();
+        
         System.out.println("Start Work"  + startTime);
         
         //thread pools for the number of tasks to be executed simutineously
@@ -203,10 +205,11 @@ public class ReviewFetcher {
 	        	//new 
 	        	
 	        	count.increment();
+	        
 	        	
 	        	System.out.println("Parrallel execution begin to execute " +
 	        			itemid + " " + "is now entering to the thread pool."+ "this is " + " " +
-	        			count.getVal()
+	        			excelData.indexOf(itemid)
 	        			+ " " + "In the SKU List." +
 	        			"Threadpool allows 3 itemids to be executed at once. Once full," +
 	        					"an new item id will be only added after at least one of the item id in the pool is completed"
@@ -266,8 +269,8 @@ public class ReviewFetcher {
 	    		}
 	    		
 	    		
-	    		System.out.println("The SKU" +" " + anitem.itemID + "has "
-	    		+ " " + anitem.reviews.size() 
+	    		System.out.println("The SKU" +" " + anitem.itemID +" "+ "has "
+	    		+ " " + anitem.reviews.size() + " "
 	    		+ "fetched reviews for specified date,begin to out put to excel.." );
 
 	    	
@@ -377,8 +380,8 @@ public class ReviewFetcher {
         	  String result = completionService.take().get(); // find the first completed task
            ;
         	  
-        	  System.out.println("Fetched content (null/full)for " + " " +excelData.get(i)+" " + "Has arrived" + " "+ result 
-        			  + " "+  "  and Right now we are at" + count.getVal() + "In the SKU LIST");
+        	  System.out.println("Generated Report(null/full)for " + " " +excelData.get(i)+" " + "Has arrived" + " "+ 
+        			 " "+  "and Right now we are at" + " "+ i +" " + "In the SKU LIST");
           /*   if(result :anItem){
             	
             	 System.out.println("this completed task has no review, null returned by previous one");
@@ -394,7 +397,9 @@ public class ReviewFetcher {
       }
     
 
-	System.out.println("All goood things come to an end, we are now at the end of the parallel execution" +
+	System.out.println("Countsize is " + count.getVal()+" "+ "should be equal to data size"
+	        +" " + excelData.size()+" "+ ". "+
+			"All goood things come to an end, we are now at the end of the parallel execution" +
 			", all files should have been fetched, executor shutting down...");
 	
 	pool.shutdown();

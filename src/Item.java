@@ -391,17 +391,12 @@ public class Item {
 					        
 					        System.out.println("This is the current iteration for review date" + " " + " " +datetext1);
 							
+					        
+					        for(int i =0;i<=31;i++){
 					    	
-							if(datetext1.equalsIgnoreCase("May 10, 2015") || datetext1.equalsIgnoreCase("September 7 , 2015") ||
-									datetext1.equalsIgnoreCase("July 14, 2015") || datetext1.equalsIgnoreCase("November 30, 2014") 
-									|| datetext1.equalsIgnoreCase("January 19, 2014")
-									|| datetext1.equalsIgnoreCase("December 11, 2014")
-									|| datetext1.equalsIgnoreCase("April 25, 2016")
-									|| datetext1.equalsIgnoreCase("December 28, 2015")
-									|| datetext1.equalsIgnoreCase("May 26, 2015")
+							if(datetext1.equalsIgnoreCase("October"+ " " +i+", "+"2016")
 								
-							
-	
+				
 								)
 						
 						{
@@ -418,7 +413,7 @@ public class Item {
 					
 						
 						}
-					
+					}
 						
 					}
 				}
